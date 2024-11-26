@@ -1,0 +1,112 @@
+<div class="matches-today-container">
+  <h2 class="section-title">Matches Today</h2>
+
+  <!-- Barra de Filtros -->
+  <div class="filters">
+    <button
+      class="filter-button"
+      [class.active]="activeFilter === 'all'"
+      (click)="setFilter('all')"
+    >
+      ALL
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="activeFilter === 'live'"
+      (click)="setFilter('live')"
+    >
+      LIVE
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="activeFilter === 'finished'"
+      (click)="setFilter('finished')"
+    >
+      FINISHED
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="activeFilter === 'scheduled'"
+      (click)="setFilter('scheduled')"
+    >
+      SCHEDULED
+    </button>
+  </div>
+
+  <ng-container *ngIf="isLoading; else matchesList">
+    <p class="loading-text">Loading matches...</p>
+  </ng-container>
+
+  <ng-template #matchesList>
+    <ng-container *ngIf="groupedMatches && groupedMatches.length > 0; else noMatchesTemplate">
+      <div *ngFor="let league of groupedMatches" class="league-group">
+        <!-- Encabezado de Liga -->
+        <button
+          class="league-header"
+          (click)="toggleLeague(league?.league?.id ?? -1)"
+          [attr.aria-expanded]="expandedLeagues[league?.league?.id] ? 'true' : 'false'"
+        >
+          <div class="league-info">
+            <img
+              [src]="league?.league?.logo || 'assets/default-league-logo.png'"
+              [alt]="league?.league?.name || 'League logo'"
+              class="league-logo"
+            />
+            <div>
+              <span class="league-name">{{ league?.league?.name || 'Unknown League' }}</span>
+              <small class="league-country">{{ league?.league?.country || 'Unknown Country' }}</small>
+            </div>
+          </div>
+          <span class="expand-icon">▶</span>
+        </button>
+
+        <!-- Partidos de Liga -->
+        <div *ngIf="expandedLeagues[league?.league?.id]" class="league-matches">
+          <a
+            *ngFor="let match of league?.matches"
+            [routerLink]="['/match', match.fixture.id]"
+            class="match-link"
+          >
+            <div class="match-card" [ngClass]="{'match-live-highlight': match?.fixture?.status?.short === 'LIVE'}">
+              <div class="match-info">
+                <div class="time-status">
+                  <span class="match-time">
+                    {{ match?.fixture?.date ? (match?.fixture?.date | date: 'shortTime') : 'N/A' }}
+                  </span>
+                  <span class="status">{{ getMatchStatus(match) }}</span>
+                </div>
+                <div class="teams">
+                  <div class="team">
+                    <img
+                      [src]="match?.teams?.home?.logo || 'assets/default-team-logo.png'"
+                      alt="{{ match?.teams?.home?.name }}"
+                      class="team-logo"
+                    />
+                    <span class="team-name">{{ match?.teams?.home?.name }}</span>
+                  </div>
+                  <span class="versus">VS</span>
+                  <div class="team">
+                    <img
+                      [src]="match?.teams?.away?.logo || 'assets/default-team-logo.png'"
+                      alt="{{ match?.teams?.away?.name }}"
+                      class="team-logo"
+                    />
+                    <span class="team-name">{{ match?.teams?.away?.name }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="score">
+                <span>{{ match?.goals?.home ?? '-' }}</span>
+                <span>-</span>
+                <span>{{ match?.goals?.away ?? '-' }}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noMatchesTemplate>
+      <p class="no-matches-text">No matches to display.</p>
+    </ng-template>
+  </ng-template>
+</div>

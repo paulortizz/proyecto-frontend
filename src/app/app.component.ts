@@ -1,13 +1,28 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './navbar/navbar.component';
+import { RouterModule } from '@angular/router';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MatchesTodayComponent } from './matches-today/matches-today.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  imports: [NavbarComponent, RouterModule, SidebarComponent, MatchesTodayComponent]
 })
 export class AppComponent {
-  title = 'frontbueno';
+  title = 'Seven Goat';
+  // Controla si se muestra el contenido principal o los detalles seleccionados
+  isViewingDetails = false;
+
+  viewDetails(): void {
+    this.isViewingDetails = true;
+    window.scrollTo(0, 0); // Asegurarse de que se vea desde arriba
+  }
+
+  goBack(): void {
+    this.isViewingDetails = false;
+  }
+
 }

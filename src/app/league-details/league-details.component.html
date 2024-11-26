@@ -1,0 +1,128 @@
+<div class="league-details-container">
+  <button class="back-button" (click)="goBack()">← Back</button>
+  <div class="league-header">
+    <img [src]="league?.logo || 'assets/default-league-logo.png'" alt="League Logo" class="league-logo">
+    <div class="header-details">
+      <h1 class="league-title">{{ league?.name || 'League Name' }}</h1>
+      <p>{{ country?.name || 'Country Name' }}</p>
+    </div>
+    <div class="season-selector">
+      <label for="season">Season:</label>
+      <select id="season" [(ngModel)]="selectedSeason" (change)="onSeasonChange(selectedSeason)">
+        <option *ngFor="let season of availableSeasons" [value]="season">{{ season }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="league-nav">
+    <button (click)="showSection('overview')" [class.active]="currentSection === 'overview'">Overview</button>
+    <button (click)="showSection('matches')" [class.active]="currentSection === 'matches'">Matches</button>
+    <button (click)="showSection('table')" [class.active]="currentSection === 'table'">Table</button>
+    <button (click)="showSection('live')" [class.active]="currentSection === 'live'">Live</button>
+  </div>
+
+  <div *ngIf="currentSection === 'overview'" class="section-content">
+    <h2>Upcoming Matches</h2>
+    <ng-container *ngIf="groupedFixtures.length > 0; else noMatches">
+      <div *ngFor="let group of groupedFixtures" class="matchday-group">
+        <h3>Matchday {{ group.matchday }}</h3>
+        <div *ngFor="let fixture of group.fixtures">
+          <!-- Enlace para redirigir al componente de detalles del partido -->
+          <a [routerLink]="['/match', fixture.id]" class="match-link">
+            <div class="match-item">
+              <div class="match-info">
+                <div class="match-date">
+                  <span class="match-day">{{ fixture.date | date: 'dd MMM' }}</span>
+                  <span class="match-time">{{ fixture.date | date: 'shortTime' }}</span>
+                </div>
+                <div class="teams-info">
+                  <div class="team">
+                    <img [src]="fixture.home.logo || 'assets/default-team-logo.png'" alt="Home Team Logo" class="team-logo">
+                    <span>{{ fixture.home.name }}</span>
+                  </div>
+                  <span class="versus">VS</span>
+                  <div class="team">
+                    <span>{{ fixture.away.name }}</span>
+                    <img [src]="fixture.away.logo || 'assets/default-team-logo.png'" alt="Away Team Logo" class="team-logo">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noMatches>
+      <p>No matches available at the moment.</p>
+    </ng-template>
+  </div>
+  
+  <!-- Sección de Resultados Recientes -->
+  <div *ngIf="currentSection === 'matches'" class="section-content recent-results">
+    <h2>Recent Results</h2>
+    <div *ngIf="results?.length && results.length > 0; else noResults">
+      <div *ngFor="let result of results" class="match-item finished">
+        <a [routerLink]="['/match', result.id]" class="match-link">
+          <span class="date">{{ result?.date | date: 'short' }}</span>
+          <div class="team-info">
+            <img [src]="result?.teams?.home?.logo || 'assets/default-team-logo.png'" alt="Home Team Logo" class="team-logo">
+            <span>{{ result?.teams?.home?.name }}</span>
+          </div>
+          <span class="score">{{ result?.goals?.home || 0 }} - {{ result?.goals?.away || 0 }}</span>
+          <div class="team-info">
+            <span>{{ result?.teams?.away?.name }}</span>
+            <img [src]="result?.teams?.away?.logo || 'assets/default-team-logo.png'" alt="Away Team Logo" class="team-logo">
+          </div>
+          <span class="status">{{ result?.status || 'FT' }}</span>
+        </a>
+      </div>
+    </div>
+    <ng-template #noResults>
+      <p>No results available at the moment.</p>
+    </ng-template>
+  </div>
+  
+
+
+
+  <!-- Sección de Tabla de Posiciones -->
+  <div *ngIf="currentSection === 'table'" class="section-content">
+    <h2>Standings</h2>
+    <div *ngIf="standings?.length && standings.length > 0; else noStandings">
+      <table class="standings-table">
+        <thead>
+          <tr>
+            <th>Position</th>
+            <th>Team</th>
+            <th>Played</th>
+            <th>Won</th>
+            <th>Drawn</th>
+            <th>Lost</th>
+            <th>Goals For</th>
+            <th>Goals Against</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let team of standings">
+            <td>{{ team?.position }}</td>
+            <td>
+              <img [src]="team?.team?.logo || 'assets/default-team-logo.png'" alt="Team Logo" class="team-logo">
+              {{ team?.team?.name || 'Team Name' }}
+            </td>
+            <td>{{ team?.played || 0 }}</td>
+            <td>{{ team?.won || 0 }}</td>
+            <td>{{ team?.drawn || 0 }}</td>
+            <td>{{ team?.lost || 0 }}</td>
+            <td>{{ team?.goalsFor || 0 }}</td>
+            <td>{{ team?.goalsAgainst || 0 }}</td>
+            <td>{{ team?.points || 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noStandings>
+      <p>No standings available for this league.</p>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+<div class="match-details-container" *ngIf="!isLoading; else loadingTemplate">
+  <button class="back-button" (click)="goBack()">← Back</button>
+  <div class="header">
+    <h2 class="league-title">
+      <img
+        [src]="matchDetails?.league?.logo || 'assets/default-league-logo.png'"
+        alt="{{ matchDetails?.league?.name }}"
+        class="league-logo"
+      />
+      {{ matchDetails?.league?.name }}
+      <small>{{ matchDetails?.league?.country }}</small>
+    </h2>
+    <p class="match-status">
+      {{ matchDetails?.fixture?.date | date: 'fullDate' }} -
+      <span>{{ getMatchStatus() }}</span>
+    </p>
+    <p class="stadium-info">
+      <strong>Stadium:</strong>
+      {{ matchDetails?.fixture?.venue?.name || 'Unknown Stadium' }},
+      {{ matchDetails?.fixture?.venue?.city || 'Unknown City' }}
+    </p>
+  </div>
+
+  <!-- Teams and Score -->
+  <div class="match-header">
+    <div class="team">
+      <img
+        [src]="matchDetails?.teams?.home?.logo || 'assets/default-team-logo.png'"
+        alt="{{ matchDetails?.teams?.home?.name }}"
+        class="team-logo"
+      />
+      <span class="team-name">{{ matchDetails?.teams?.home?.name }}</span>
+    </div>
+
+    <div class="score">
+      <span>{{ matchDetails?.goals?.home ?? '-' }}</span>
+      <span>-</span>
+      <span>{{ matchDetails?.goals?.away ?? '-' }}</span>
+    </div>
+
+    <div class="team">
+      <img
+        [src]="matchDetails?.teams?.away?.logo || 'assets/default-team-logo.png'"
+        alt="{{ matchDetails?.teams?.away?.name }}"
+        class="team-logo"
+      />
+      <span class="team-name">{{ matchDetails?.teams?.away?.name }}</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button
+      *ngFor="let tab of ['events', 'statistics', 'lineups']"
+      class="tab-button"
+      [class.active]="activeTab === tab"
+      (click)="setActiveTab(tab)"
+    >
+      {{ tab | titlecase }}
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Events -->
+    <ng-container *ngIf="activeTab === 'events'">
+      <div class="events-container">
+        <!-- Home Team Events -->
+        <div class="team-events home-events">
+          <h3 class="team-title">{{ matchDetails?.teams?.home?.name }}</h3>
+          <ng-container *ngFor="let event of matchDetails.events">
+            <div
+              class="event-item"
+              *ngIf="event.team === matchDetails?.teams?.home?.name"
+            >
+              <span class="event-time">{{ event.time }}'</span>
+              <img
+                [src]="getEventIcon(event.type, event.detail)"
+                alt="{{ event.detail }}"
+                class="event-icon"
+              />
+              <span class="event-player">{{ event.player || 'Unknown Player' }}</span>
+              <span class="event-description">- {{ event.detail }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Away Team Events -->
+        <div class="team-events away-events">
+          <h3 class="team-title">{{ matchDetails?.teams?.away?.name }}</h3>
+          <ng-container *ngFor="let event of matchDetails.events">
+            <div
+              class="event-item"
+              *ngIf="event.team === matchDetails?.teams?.away?.name"
+            >
+              <span class="event-time">{{ event.time }}'</span>
+              <img
+                [src]="getEventIcon(event.type, event.detail)"
+                alt="{{ event.detail }}"
+                class="event-icon"
+              />
+              <span class="event-player">{{ event.player || 'Unknown Player' }}</span>
+              <span class="event-description">- {{ event.detail }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Statistics -->
+    <ng-container *ngIf="activeTab === 'statistics'">
+      <div class="statistics-container">
+        <div class="stat-row" *ngFor="let stat of combinedStatistics">
+          <div class="team-stat">
+            <span class="stat-value">{{ stat.homeValue }}</span>
+            <div class="stat-bar">
+              <div
+                class="stat-bar-home"
+                [style.width]="(stat.homeValue / (stat.homeValue + stat.awayValue)) * 100 + '%'"
+              ></div>
+            </div>
+          </div>
+          <div class="stat-type">{{ stat.name }}</div>
+          <div class="team-stat">
+            <div class="stat-bar">
+              <div
+                class="stat-bar-away"
+                [style.width]="(stat.awayValue / (stat.homeValue + stat.awayValue)) * 100 + '%'"
+              ></div>
+            </div>
+            <span class="stat-value">{{ stat.awayValue }}</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Lineups -->
+    <ng-container *ngIf="activeTab === 'lineups'">
+      <div class="lineups-container">
+        <!-- Home Team Lineup -->
+        <div class="lineup home-lineup">
+          <h3>{{ lineups[0]?.team || 'Home Team' }} ({{ lineups[0]?.formation }})</h3>
+          <div class="field">
+            <div
+              *ngFor="let player of lineups[0]?.players"
+              class="player"
+              [style.gridRow]="player.position?.gridRow"
+              [style.gridColumn]="player.position?.gridColumn"
+            >
+              <div class="circle">
+                <span class="player-number">{{ player.number }}</span>
+              </div>
+              <span class="player-name">{{ player.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Away Team Lineup -->
+        <div class="lineup away-lineup">
+          <h3>{{ lineups[1]?.team || 'Away Team' }} ({{ lineups[1]?.formation }})</h3>
+          <div class="field">
+            <div
+              *ngFor="let player of lineups[1]?.players"
+              class="player"
+              [style.gridRow]="player.position?.gridRow"
+              [style.gridColumn]="player.position?.gridColumn"
+            >
+              <div class="circle">
+                <span class="player-number">{{ player.number }}</span>
+              </div>
+              <span class="player-name">{{ player.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <p class="loading-text">Loading match details...</p>
+</ng-template>

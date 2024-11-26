@@ -1,0 +1,48 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3>Leagues</h3>
+    <button 
+      class="expand-icon" 
+      (click)="toggleShowAll()" 
+      aria-label="Expand or collapse leagues"
+    >
+      <i class="fas" [ngClass]="showAllLeagues ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </button>
+  </div>
+  
+  <ul class="league-list">
+    <li *ngFor="let league of displayedLeagues" class="league-item">
+      <a (click)="viewMatches(league.id)">
+        <img [src]="league.logo" alt="{{ league.name }}" class="league-logo" />
+        <span class="league-name">{{ league.name }}</span>
+        <div class="league-country">{{ league.country.name || league.country.organization }}</div> <!-- Mostrar país o entidad -->
+      </a>
+    </li>
+  </ul>
+
+  <!-- Sección de Árbitros -->
+  <div class="sidebar-header">
+    <h3>Referees</h3>
+    <button 
+      class="expand-icon" 
+      (click)="toggleShowAllReferees()" 
+      aria-label="Expand or collapse referees"
+    >
+      <i class="fas" [ngClass]="showAllReferees ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </button>
+  </div>
+  
+  <ul class="referee-group">
+    <li *ngFor="let group of displayedRefereeGroups | keyvalue" class="referee-group-item">
+      <h4 class="group-name">{{ group.key }}</h4>
+      <ul class="referee-list">
+        <li *ngFor="let referee of group.value" class="referee-item">
+          <a class="referee-link" (click)="viewRefereeDetails(referee.name)">
+            <span class="referee-name">{{ referee.name }}</span>
+            <span class="referee-stats">({{ referee.matchesArbitrated }} matches)</span>
+          </a>          
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

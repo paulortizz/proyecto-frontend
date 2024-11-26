@@ -1,1 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+/* Fondo general de la página */
+body {
+  background: linear-gradient(135deg, #1e1e1e, #2c2c2c, #1a1a1a);
+  font-family: 'Roboto', sans-serif;
+  color: #e0e0e0; /* Color de texto neutro */
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenido principal para ajustar el padding y darle estructura */
+.main-content {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03); /* Fondo semitransparente */
+  border-radius: 8px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Sombra para darle profundidad */
+  backdrop-filter: blur(10px); /* Efecto de difuminado */
+}
+body, .app-container {
+  padding-top: 80px; /* Ajusta este valor si el navbar es más alto o más bajo */
+}
+
+
+/* Estilos de encabezado */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffcc00;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Estilos de texto */
+p {
+  color: #b0b0b0;
+  line-height: 1.6;
+}
+
+/* Estilos para enlaces */
+a {
+  color: #ff7f00;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #ffd700;
+  text-decoration: underline;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .back-button {
+    display: inline-block;
+    background-color: #ffcc00;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 16px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .back-button:hover {
+    background-color: #ff9900;
+    color: #fff;
+  }
+  
+  .back-button:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+  }
+  
+  

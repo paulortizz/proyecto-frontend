@@ -1,0 +1,42 @@
+<div class="referee-details" *ngIf="referee">
+  <div class="referee-header">
+    <h1 class="referee-name">{{ referee.name }}</h1>
+    <h3 class="referee-organization">Country/Organization: {{ referee.countryOrOrganization }}</h3>
+  </div>
+
+  <div class="referee-stats">
+    <h2>Statistics</h2>
+    <ul>
+      <li><strong>Matches Arbitrated:</strong> {{ referee.matchesArbitrated }}</li>
+      <li><strong>Yellow Cards:</strong> {{ referee.yellowCards }}</li>
+      <li><strong>Red Cards:</strong> {{ referee.redCards }}</li>
+    </ul>
+  </div>
+
+  <div class="referee-common-stadiums" *ngIf="referee.mostCommonStadiums?.length">
+    <h2>Most Common Stadiums</h2>
+    <ul>
+      <li *ngFor="let stadium of referee.mostCommonStadiums">
+        <strong>{{ stadium.name }}</strong> ({{ stadium.count }} matches)
+      </li>
+    </ul>
+  </div>
+
+  <div class="referee-last-matches" *ngIf="referee.lastFiveMatches?.length">
+    <h2>Last 5 Matches</h2>
+    <div class="match-item" *ngFor="let match of referee.lastFiveMatches">
+      <p><strong>Date:</strong> {{ match.date | date: 'fullDate' }}</p>
+      <p><strong>Match:</strong> {{ match.home }} vs {{ match.away }}</p>
+      <p><strong>Score:</strong> {{ match.score }}</p>
+      <p><strong>Stadium:</strong> {{ match.stadium }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+  <p>Loading referee details...</p>
+</div>
+
+<div class="error" *ngIf="errorMessage">
+  <p>{{ errorMessage }}</p>
+</div>

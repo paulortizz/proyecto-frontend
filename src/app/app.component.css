@@ -1,0 +1,12 @@
+.app-container {
+    display: flex;
+    margin-left: 250px; /* Espacio suficiente para el sidebar */
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    min-height: 100vh; /* Asegura que el contenido ocupe toda la altura de la pantalla */
+  }
+  

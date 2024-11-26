@@ -1,0 +1,273 @@
+/* Contenedor principal */
+.league-details-container {
+  padding: 20px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-radius: 10px;
+  max-width: 900px;
+  margin: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Encabezado de la liga */
+.league-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #333;
+  border-radius: 10px;
+}
+
+.league-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.header-details {
+  flex-grow: 1;
+}
+
+.league-title {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #f7c948;
+}
+
+.country-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* Selector de temporada */
+.season-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.season-selector label {
+  color: #f7c948;
+  font-weight: bold;
+}
+
+.season-selector select {
+  background-color: #333;
+  color: #f7c948;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.season-selector select:hover {
+  background-color: #444;
+}
+
+/* Navegación de secciones */
+.league-nav {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.league-nav button {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.league-nav .active {
+  color: #f7c948;
+  border-bottom: 2px solid #f7c948;
+}
+
+/* Sección de Próximos Partidos */
+.section-content h2 {
+  font-size: 1.5rem;
+  color: #f7c948;
+  margin-bottom: 1rem;
+}
+
+.match-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: #333;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.match-item:hover {
+  background-color: #444;
+}
+
+.match-info {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.match-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  margin-right: 1rem;
+  text-align: center;
+}
+
+.match-day {
+  font-weight: bold;
+}
+
+.match-time {
+  color: #f7c948;
+}
+
+.teams-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.team-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.versus {
+  font-size: 1rem;
+  color: #ccc;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Estilos para Resultados Recientes */
+.recent-results .match-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #333;
+  margin-bottom: 8px;
+}
+
+.recent-results .match-item .date {
+  color: #bbb;
+  font-size: 0.9rem;
+  margin-right: 10px;
+}
+
+.recent-results .match-item .team-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.recent-results .match-item .team-info img.team-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+
+.recent-results .match-item .score {
+  color: #f7c948;
+  font-weight: bold;
+  margin: 0 15px;
+  font-size: 1rem;
+  text-align: center;
+  width: 50px; /* Ajusta este valor para centrar el marcador */
+}
+
+.recent-results .match-item .status {
+  color: #bbb;
+  font-size: 0.8rem;
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Tabla de Posiciones */
+.standings-table {
+  width: 100%;
+  text-align: center;
+  background-color: #444;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1rem;
+}
+
+.standings-table th,
+.standings-table td {
+  padding: 1rem;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.standings-table th {
+  background-color: #333;
+  color: #f7c948;
+  font-size: 1rem;
+}
+
+.standings-table tr:nth-child(even) td {
+  background-color: #333;
+}
+
+.standings-table td {
+  font-size: 0.95rem;
+}
+
+.standings-table .team-logo {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.standings-table tr:hover {
+  background-color: #3a3a3a;
+}
+
+/* Estilos para posiciones específicas */
+.standings-table .position-promotion {
+  background-color: #0057e7;
+  color: #fff;
+}
+
+.standings-table .position-europa {
+  background-color: #b5179e;
+  color: #fff;
+}
+
+.standings-table .position-conference {
+  background-color: #7209b7;
+  color: #fff;
+}
+
+.standings-table .position-relegation {
+  background-color: #d00000;
+  color: #fff;
+}

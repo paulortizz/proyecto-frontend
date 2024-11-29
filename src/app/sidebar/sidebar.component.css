@@ -100,3 +100,91 @@
 .group-list .list-item {
   padding-left: 25px;
 }
+
+/* Lista de equipos */
+/* Equipos (adaptado al diseño de Ligas) */
+.team-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.team-item:hover {
+  background-color: #1e1e1e;
+}
+
+.team-item .team-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.team-item .team-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-item .team-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.team-item .team-country {
+  font-size: 12px;
+  color: #bbbbbb;
+}
+
+/* Contenedor de la barra de búsqueda */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e; /* Fondo oscuro */
+  border: 1px solid #333; /* Borde sutil */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 5px 10px; /* Espaciado interno */
+  margin: 10px 15px; /* Margen exterior */
+  transition: border-color 0.3s ease;
+}
+
+.search-bar:hover {
+  border-color: #f4c542; /* Cambio de color de borde al pasar el mouse */
+}
+
+/* Estilo del ícono de búsqueda */
+.search-bar .search-icon {
+  font-size: 16px;
+  color: #bbb; /* Color inicial */
+  margin-right: 8px; /* Espaciado entre ícono y campo de texto */
+  transition: color 0.3s ease;
+}
+
+.search-bar:hover .search-icon {
+  color: #f4c542; /* Color del ícono al pasar el mouse */
+}
+
+/* Estilo del campo de texto */
+.search-bar input {
+  flex: 1; /* Ocupa todo el espacio disponible */
+  background: transparent; /* Fondo transparente */
+  border: none; /* Sin borde */
+  outline: none; /* Sin contorno al enfocar */
+  color: #fff; /* Texto blanco */
+  font-size: 14px; /* Tamaño del texto */
+  font-family: 'Roboto', sans-serif;
+  padding: 5px; /* Espaciado interno */
+}
+
+.search-bar input::placeholder {
+  color: #bbb; /* Color del texto de marcador de posición */
+  font-size: 13px;
+  transition: color 0.3s ease;
+}
+
+.search-bar input:focus::placeholder {
+  color: #666; /* Cambiar el color del marcador de posición al enfocar */
+}

@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
   refereeGroups: { [key: string]: any[] } = {}; // Árbitros agrupados por país u organización
   displayedLeagues: any[] = []; // Ligas visibles
   displayedRefereeGroups: { [key: string]: any[] } = {}; // Árbitros visibles agrupados
-  teams: any[] = []; // Lista de equipos
+  teams: any[] = []; // Lista de equipos visibles en la UI
   showAllTeams = false; // Control para expandir y contraer la lista de equipos
   searchQuery: string = ''; // Término de búsqueda para equipos
   defaultTeams: any[] = [
@@ -41,8 +41,8 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadDefaultTeams(); // Cargar equipos predeterminados al inicio
     this.loadLeagues(); // Cargar ligas al inicializar
-    this.loadTeams(null, new Date().getFullYear().toString()); // Mostrar equipos predeterminados al iniciar
   }
 
   // Métodos para manejar ligas
@@ -134,49 +134,60 @@ export class SidebarComponent implements OnInit {
         console.error('Error al obtener árbitros para la liga:', error),
     });
   }
-
-  loadTeams(leagueId: number | string | null, season: string): void {
-    if (leagueId === null) {
-      console.warn('No league selected, skipping team load.');
-      return;
-    }
-
-    const numericLeagueId = typeof leagueId === 'string' ? parseInt(leagueId, 10) : leagueId;
-
-    if (isNaN(numericLeagueId)) {
-      console.error('leagueId no es un número válido:', leagueId);
-      return;
-    }
-
-    this.footballService.getTeams(numericLeagueId, parseInt(season, 10), this.searchQuery).subscribe({
-      next: (data: any) => {
-        if (data && data.status === 'success') {
-          this.teams = data.data || [];
-        } else {
-          console.warn('No se encontraron equipos para esta liga.');
-          this.teams = [];
-        }
-      },
-      error: (error: any) =>
-        console.error('Error al obtener equipos para la liga:', error),
-    });
+   
+  // Método para cargar equipos por liga y temporada
+loadTeams(leagueId: number | null, season: string): void {
+  if (!leagueId) {
+    this.loadDefaultTeams(); // Cargar equipos predeterminados si no hay liga seleccionada
+    return;
   }
 
-  toggleShowAllTeams(): void {
-    this.showAllTeams = !this.showAllTeams;
-  }
+  this.footballService.getTeams(leagueId, parseInt(season, 10), this.searchQuery).subscribe({
+    next: (data: any) => {
+      if (data && data.status === 'success') {
+        this.teams = data.data || [];
+      } else {
+        console.warn('No se encontraron equipos para esta liga y temporada.');
+        this.loadDefaultTeams();
+      }
+    },
+    error: (error: any) => {
+      console.error('Error al cargar equipos:', error);
+      this.loadDefaultTeams();
+    },
+  });
+}
 
-  get featuredTeams(): any[] {
-    const TEAM_LIMIT = 5; // Número máximo de equipos a mostrar
-    return this.teams.slice(0, TEAM_LIMIT);
+
+  // Cargar equipos por defecto
+  loadDefaultTeams(): void {
+    this.teams = [...this.defaultTeams];
   }
 
   onSearchChange(): void {
     if (!this.searchQuery.trim()) {
+      // Si el campo de búsqueda está vacío, mostrar equipos predeterminados
       this.teams = [...this.defaultTeams];
       return;
     }
-    this.loadTeams(this.currentLeagueId, new Date().getFullYear().toString());
+  
+    // Buscar equipos globalmente (sin limitar a una liga)
+    this.footballService.searchTeams(this.searchQuery).subscribe({
+      next: (data: any) => {
+        if (data && data.status === 'success') {
+          this.teams = data.data || [];
+        } else {
+          this.teams = [];
+        }
+      },
+      error: (error: any) => console.error('Error al buscar equipos:', error),
+    });
+  }
+  
+  
+
+  toggleShowAllTeams(): void {
+    this.showAllTeams = !this.showAllTeams;
   }
 
   viewRefereeDetails(refereeName: string): void {
@@ -187,6 +198,4 @@ export class SidebarComponent implements OnInit {
       console.warn('No league selected to fetch referees.');
     }
   }
-  
-
 }

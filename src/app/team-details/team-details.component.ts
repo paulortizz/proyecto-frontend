@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FootballService } from '../football.service';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-team-details',
@@ -10,12 +11,13 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./team-details.component.css'],
   imports: [CommonModule]
 })
-export class TeamDetailsComponent implements OnInit {
+export class TeamDetailsComponent implements OnInit, OnDestroy {
   team: any = null;
   matches: any[] = [];
   isLoading = true;
   errorMessage = '';
   season: string = new Date().getFullYear().toString(); // Temporada actual
+  private routeSub!: Subscription; // Suscripción a cambios en la ruta
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -23,12 +25,15 @@ export class TeamDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const teamId = this.route.snapshot.paramMap.get('id'); // Obtener el ID del equipo desde la URL.
-
-    if (teamId) {
-      this.loadTeamDetails(parseInt(teamId, 10));
-      this.loadTeamMatches(parseInt(teamId, 10));
-    }
+    // Suscribirse a los cambios en los parámetros de la ruta
+    this.routeSub = this.route.params.subscribe(params => {
+      const teamId = params['id']; // Asegúrate de que 'id' coincide con tu configuración de ruta
+      if (teamId) {
+        this.isLoading = true; // Reinicia el estado de carga
+        this.loadTeamDetails(parseInt(teamId, 10));
+        this.loadTeamMatches(parseInt(teamId, 10));
+      }
+    });
   }
 
   loadTeamDetails(teamId: number): void {
@@ -48,12 +53,19 @@ export class TeamDetailsComponent implements OnInit {
   loadTeamMatches(teamId: number): void {
     this.footballService.getTeamMatches(teamId, this.season).subscribe({
       next: (response) => {
-        this.matches = response.data.playedMatches || [];
+        this.matches = response.data || []; // Ajuste para evitar fallos si no hay partidos
       },
       error: (error) => {
         console.error('Error loading team matches:', error);
         this.errorMessage = 'Failed to load team matches.';
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    // Cancelar la suscripción al destruir el componente
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
   }
 }

@@ -76,6 +76,12 @@ export class FootballService {
     return this.http.get(`${this.apiUrl}/teams`, { params });
   }
   
+  searchTeams(searchQuery: string): Observable<any> {
+    const params: any = { search: searchQuery };
+    return this.http.get(`${this.apiUrl}/teams`, { params });
+  }
+  
+  
   
   
   getTeamDetails(teamId: number) {

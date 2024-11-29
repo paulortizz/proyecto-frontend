@@ -39,8 +39,8 @@
     </ul>
   </div>
 
-  <!-- Sección de Equipos -->
-<div class="sidebar-section">
+ <!-- Sección de Equipos -->
+ <div class="sidebar-section">
   <div class="section-header">
     <h2 class="section-title">TEAMS</h2>
     <button
@@ -54,6 +54,7 @@
 
   <!-- Barra de búsqueda -->
   <div class="search-bar">
+    <i class="fas fa-search search-icon"></i> <!-- Ícono de búsqueda -->
     <input
       type="text"
       class="search-input"
@@ -63,27 +64,20 @@
       aria-label="Search teams"
     />
   </div>
+  
 
   <!-- Lista de equipos -->
   <ul class="teams-list">
     <li
-      *ngFor="let team of (showAllTeams ? teams : featuredTeams)"
+      *ngFor="let team of teams"
       class="team-item"
+      (click)="viewTeamDetails(team.id)"
     >
-      <button 
-        class="team-button" 
-        (click)="viewTeamDetails(team.id)"
-        [attr.aria-label]="'View details for ' + team.name"
-      >
-        <img [src]="team.logo" [alt]="team.name + ' logo'" class="team-logo" />
-        <div class="team-info">
-          <span class="team-name">{{ team.name }}</span>
-          <span class="team-country">{{ team.country }}</span>
-          <span *ngIf="team.venue?.name" class="team-venue">
-            {{ team.venue.name }} - {{ team.venue.city }}
-          </span>
-        </div>
-      </button>
+      <img [src]="team.logo" alt="{{ team.name }} logo" class="team-logo" />
+      <div class="team-info">
+        <span class="team-name">{{ team.name }}</span>
+        <span class="team-country">{{ team.country }}</span>
+      </div>
     </li>
   </ul>
 </div>

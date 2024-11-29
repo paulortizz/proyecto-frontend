@@ -67,6 +67,25 @@ export class FootballService {
     return this.http.get(`${this.apiUrl}/referees/overview/${leagueId}?season=${season}`);
   }
   
+  // Obtener equipos con soporte para búsqueda
+  getTeams(leagueId: number, season: number, search: string = ''): Observable<any> {
+    const params: any = { leagueId, season };
+    if (search) {
+      params.search = search;
+    }
+    return this.http.get(`${this.apiUrl}/teams`, { params });
+  }
+  
+  
+  
+  getTeamDetails(teamId: number) {
+    return this.http.get<any>(`http://localhost:3000/api/teams/${teamId}/details`);
+  }
+  
+  getTeamMatches(teamId: number, season: string) {
+    return this.http.get<any>(`http://localhost:3000/api/teams/${teamId}/matches?season=${season}`);
+  }
+  
   
   
   // Obtener todas las categorías de partidos (en vivo, recientes, próximos)

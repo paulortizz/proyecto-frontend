@@ -2,13 +2,14 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FootballService } from '../football.service';
+import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
 })
 export class SidebarComponent implements OnInit {
   @Output() navigate = new EventEmitter<void>();
@@ -17,6 +18,16 @@ export class SidebarComponent implements OnInit {
   refereeGroups: { [key: string]: any[] } = {}; // Árbitros agrupados por país u organización
   displayedLeagues: any[] = []; // Ligas visibles
   displayedRefereeGroups: { [key: string]: any[] } = {}; // Árbitros visibles agrupados
+  teams: any[] = []; // Lista de equipos
+  showAllTeams = false; // Control para expandir y contraer la lista de equipos
+  searchQuery: string = ''; // Término de búsqueda para equipos
+  defaultTeams: any[] = [
+    { id: 1, name: 'Real Madrid', logo: 'https://path-to-logo/realmadrid.png', country: 'Spain' },
+    { id: 2, name: 'Manchester United', logo: 'https://path-to-logo/manutd.png', country: 'England' },
+    { id: 3, name: 'Barcelona', logo: 'https://path-to-logo/barcelona.png', country: 'Spain' },
+    { id: 4, name: 'Al Nassr', logo: 'https://path-to-logo/alnassr.png', country: 'Saudi Arabia' },
+    { id: 5, name: 'Bayern Munich', logo: 'https://path-to-logo/bayernmunich.png', country: 'Germany' },
+  ]; // Equipos predeterminados visibles inicialmente
 
   showAllLeagues = false; // Control de expansión de ligas
   showAllReferees = false; // Control de expansión de árbitros
@@ -31,6 +42,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadLeagues(); // Cargar ligas al inicializar
+    this.loadTeams(null, new Date().getFullYear().toString()); // Mostrar equipos predeterminados al iniciar
   }
 
   // Métodos para manejar ligas
@@ -41,10 +53,16 @@ export class SidebarComponent implements OnInit {
       : this.featuredLeagues;
   }
 
-  viewMatches(leagueId: number): void {
-    this.currentLeagueId = leagueId; // Actualizar liga seleccionada
+  viewMatches(leagueId: number | string): void {
+    this.router.navigate(['/league', leagueId]);
+    this.currentLeagueId = typeof leagueId === 'string' ? parseInt(leagueId, 10) : leagueId; // Actualizar liga seleccionada
     const currentYear = new Date().getFullYear().toString();
-    this.loadDefaultReferees(leagueId, currentYear); // Cargar árbitros de la liga seleccionada
+    this.loadDefaultReferees(this.currentLeagueId, currentYear); // Cargar árbitros de la liga seleccionada
+    this.loadTeams(this.currentLeagueId, currentYear); // Cargar equipos de la liga seleccionada
+  }
+
+  viewTeamDetails(teamId: number): void {
+    this.router.navigate(['/team', teamId]);
   }
 
   get featuredLeagues(): any[] {
@@ -56,8 +74,8 @@ export class SidebarComponent implements OnInit {
   loadLeagues(): void {
     this.footballService.getLeagues().subscribe({
       next: (data: any) => {
-        if (data && data.status === 'success') {
-          this.leagues = data.data || [];
+        if (data && Array.isArray(data.data)) {
+          this.leagues = data.data;
           this.displayedLeagues = this.featuredLeagues;
 
           // Establecer la liga actual si aún no hay una seleccionada
@@ -65,7 +83,10 @@ export class SidebarComponent implements OnInit {
             this.currentLeagueId = this.leagues[0].id; // Primera liga como selección inicial
             const currentYear = new Date().getFullYear().toString();
             this.loadDefaultReferees(this.currentLeagueId, currentYear);
+            this.loadTeams(this.currentLeagueId, currentYear);
           }
+        } else {
+          console.warn('La respuesta de la API no contiene datos válidos.');
         }
       },
       error: (error: any) => console.error('Error al obtener ligas:', error),
@@ -85,9 +106,10 @@ export class SidebarComponent implements OnInit {
   }
 
   limitRefereeGroups(): { [key: string]: any[] } {
+    const REFEREE_LIMIT = 5; // Número máximo de árbitros a mostrar por grupo
     const limitedGroups: { [key: string]: any[] } = {};
     for (const [country, referees] of Object.entries(this.refereeGroups)) {
-      limitedGroups[country] = referees.slice(0, 5); // Mostrar 5 árbitros por país
+      limitedGroups[country] = referees.slice(0, REFEREE_LIMIT);
     }
     return limitedGroups;
   }
@@ -113,11 +135,58 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  loadTeams(leagueId: number | string | null, season: string): void {
+    if (leagueId === null) {
+      console.warn('No league selected, skipping team load.');
+      return;
+    }
+
+    const numericLeagueId = typeof leagueId === 'string' ? parseInt(leagueId, 10) : leagueId;
+
+    if (isNaN(numericLeagueId)) {
+      console.error('leagueId no es un número válido:', leagueId);
+      return;
+    }
+
+    this.footballService.getTeams(numericLeagueId, parseInt(season, 10), this.searchQuery).subscribe({
+      next: (data: any) => {
+        if (data && data.status === 'success') {
+          this.teams = data.data || [];
+        } else {
+          console.warn('No se encontraron equipos para esta liga.');
+          this.teams = [];
+        }
+      },
+      error: (error: any) =>
+        console.error('Error al obtener equipos para la liga:', error),
+    });
+  }
+
+  toggleShowAllTeams(): void {
+    this.showAllTeams = !this.showAllTeams;
+  }
+
+  get featuredTeams(): any[] {
+    const TEAM_LIMIT = 5; // Número máximo de equipos a mostrar
+    return this.teams.slice(0, TEAM_LIMIT);
+  }
+
+  onSearchChange(): void {
+    if (!this.searchQuery.trim()) {
+      this.teams = [...this.defaultTeams];
+      return;
+    }
+    this.loadTeams(this.currentLeagueId, new Date().getFullYear().toString());
+  }
+
   viewRefereeDetails(refereeName: string): void {
+    console.log(`Viewing details for referee: ${refereeName}`);
     if (this.currentLeagueId) {
       this.router.navigate([`/referee/${this.currentLeagueId}/${refereeName}`]);
     } else {
       console.warn('No league selected to fetch referees.');
     }
   }
+  
+
 }

@@ -3,17 +3,29 @@ import { ActivatedRoute } from '@angular/router';
 import { FootballService } from '../football.service';
 import { CommonModule } from '@angular/common';
 
+interface Referee {
+  name: string;
+  countryOrOrganization: string;
+  matchesArbitrated: number;
+  yellowCards: number;
+  redCards: number;
+  mostCommonStadiums: { [key: string]: number };
+  historicalStats: { [season: string]: { matches: number; yellowCards: number; redCards: number } };
+  lastFiveMatches: { date: string; home: string; away: string; score: string; stadium: string }[];
+}
+
 @Component({
   selector: 'app-referee-details',
   standalone: true,
   templateUrl: './referee-details.component.html',
   styleUrls: ['./referee-details.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule]
 })
 export class RefereeDetailsComponent implements OnInit {
-  referee: any = null;
+  referee: Referee | null = null; // Usamos la interfaz Referee
   isLoading = true;
   errorMessage = '';
+  selectedTab: string = 'statistics'; // Controla las pestañas visibles
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -21,33 +33,31 @@ export class RefereeDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Detectar cambios en los parámetros de la ruta
-    this.route.paramMap.subscribe((params) => {
-      const refereeName = params.get('name');
-      const leagueId = params.get('leagueId'); // Liga contextual
-      const currentYear = new Date().getFullYear().toString();
+    const refereeName = this.route.snapshot.paramMap.get('name');
+    const leagueId = this.route.snapshot.paramMap.get('leagueId');
+    const currentYear = new Date().getFullYear().toString();
 
-      if (refereeName && leagueId) {
-        this.loadRefereeDetails(parseInt(leagueId, 10), refereeName, currentYear);
-      }
-    });
+    if (refereeName && leagueId) {
+      this.loadRefereeDetails(parseInt(leagueId, 10), currentYear, refereeName);
+    } else {
+      this.errorMessage = 'Invalid referee or league data.';
+      this.isLoading = false;
+    }
   }
 
-  loadRefereeDetails(leagueId: number, refereeName: string, season: string): void {
-    this.isLoading = true;
-    this.errorMessage = '';
-    this.referee = null;
-
+  loadRefereeDetails(leagueId: number, season: string, refereeName: string): void {
     this.footballService.getRefereesOverview(leagueId, season).subscribe({
       next: (data) => {
         if (data && data.status === 'success') {
-          const referees = data.data || {}; // Árbitros agrupados por país
-          const allReferees = Object.values(referees).flat(); // Convertir grupos en un array plano
-          this.referee = allReferees.find((ref: any) => ref.name === refereeName);
+          const referees = data.data || {};
+          const allReferees = Object.values(referees).flat() as Referee[]; // Casting explícito
+          this.referee = allReferees.find((ref: Referee) => ref.name === refereeName) || null;
 
           if (!this.referee) {
             this.errorMessage = 'Referee not found.';
           }
+        } else {
+          this.errorMessage = 'No data available.';
         }
         this.isLoading = false;
       },
@@ -55,7 +65,11 @@ export class RefereeDetailsComponent implements OnInit {
         console.error('Error fetching referee details:', error);
         this.errorMessage = 'Failed to load referee details.';
         this.isLoading = false;
-      },
+      }
     });
+  }
+
+  changeTab(tab: string): void {
+    this.selectedTab = tab;
   }
 }

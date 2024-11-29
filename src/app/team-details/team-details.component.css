@@ -1,0 +1,41 @@
+.team-details {
+    padding: 20px;
+  }
+  
+  .team-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .team-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+  }
+  
+  .team-info h1 {
+    font-size: 1.5em;
+    margin: 0;
+  }
+  
+  .team-venue {
+    margin-top: 20px;
+  }
+  
+  .stadium-image {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 10px;
+  }
+  
+  .team-matches ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .team-matches li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  

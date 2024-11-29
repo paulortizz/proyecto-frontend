@@ -1,0 +1,36 @@
+<div class="team-details" *ngIf="team; else loadingTemplate">
+    <!-- Encabezado del equipo -->
+    <div class="team-header">
+      <img [src]="team.team.logo" alt="{{ team.team.name }}" class="team-logo" />
+      <div class="team-info">
+        <h1>{{ team.team.name }}</h1>
+        <p>{{ team.team.country }}</p>
+        <p>Founded: {{ team.team.founded }}</p>
+      </div>
+    </div>
+  
+    <!-- Detalles del estadio -->
+    <div class="team-venue">
+      <h2>Stadium: {{ team.venue.name }}</h2>
+      <p>Address: {{ team.venue.address }}</p>
+      <p>Capacity: {{ team.venue.capacity }}</p>
+      <img [src]="team.venue.image" alt="{{ team.venue.name }}" class="stadium-image" />
+    </div>
+  
+    <!-- Lista de partidos -->
+    <div class="team-matches">
+      <h2>Played Matches</h2>
+      <ul>
+        <li *ngFor="let match of matches">
+          <strong>{{ match.fixture.date | date: 'medium' }}</strong>
+          {{ match.teams.home.name }} vs {{ match.teams.away.name }}
+          <span>{{ match.goals.home }} - {{ match.goals.away }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <ng-template #loadingTemplate>
+    <p>Loading team details...</p>
+  </ng-template>
+  

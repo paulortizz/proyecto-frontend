@@ -1,162 +1,102 @@
-/* Reducir el ancho del sidebar */
+/* Sidebar general */
 .sidebar {
-  width: 200px; /* Ajusta el ancho a un tamaño menor */
-  padding: 10px 15px; /* Reducir el padding para hacer el sidebar más compacto */
-  background-color: #1a1a1a;
-  color: #ffffff;
+  width: 220px;
+  background-color: #121212;
+  color: #f1f1f1;
   font-family: 'Roboto', sans-serif;
   height: calc(100vh - 60px);
+  overflow-y: auto;
   position: fixed;
   top: 60px;
   left: 0;
-  overflow-y: auto;
-  border-top: 1px solid #444;
-  border-right: 1px solid #444;
-  z-index: 10;
+  border-right: 1px solid #333;
 }
 
-/* Encabezado del sidebar */
-.sidebar-header {
+/* Títulos de sección */
+.section-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px; /* Tamaño de fuente más pequeño */
+  font-size: 14px;
+  color: #f4c542;
+  padding: 10px 15px;
+  text-transform: uppercase;
 }
 
-/* Lista de ligas */
-.league-list {
+/* Iconos de expandir/contraer */
+.toggle-icon {
+  cursor: pointer;
+  color: #f4c542;
+  font-size: 14px;
+}
+
+.toggle-icon i {
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon i.fa-chevron-up {
+  transform: rotate(180deg);
+}
+
+/* Listas */
+.item-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Elemento individual de la liga */
-.league-item {
+.list-item {
   display: flex;
   align-items: center;
-  padding: 4px 5px; /* Menos padding para hacer cada item más compacto */
-  margin-bottom: 5px; /* Menor separación entre items */
-  border-radius: 4px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.league-item:hover {
-  background-color: #333333;
-  transform: translateX(5px);
-}
-
-/* Logo de la liga */
-.league-logo {
-  width: 20px; /* Logo más pequeño */
-  height: 20px;
-  margin-right: 6px;
-  vertical-align: middle;
-  filter: brightness(1.2);
-}
-
-/* Nombre de la liga */
-.league-name {
-  font-size: 12px; /* Tamaño de fuente reducido */
-  font-weight: normal;
-  color: #e0e0e0;
-}
-
-/* País o entidad debajo del nombre de la liga */
-.league-country {
-  font-size: 10px; /* Tamaño más pequeño para optimizar espacio */
-  color: #b0b0b0;
-  margin-top: 2px;
-}
-
-/* Icono para expandir o contraer */
-.expand-icon {
-  background-color: transparent;
-  border: none;
-  color: #ffcc00;
-  font-size: 14px;
+  padding: 10px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.list-item:hover {
+  background-color: #1e1e1e;
+}
+
+/* Logos */
+.item-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Detalles de cada ítem */
+.item-details {
   display: flex;
-  align-items: center;
-  transition: color 0.3s ease;
+  flex-direction: column;
 }
 
-.expand-icon:hover {
-  color: #ffd700;
+.item-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
-/* Estilo general de la lista de árbitros */
-.referee-group {
+.item-subtext {
+  font-size: 12px;
+  color: #bbbbbb;
+}
+
+/* Títulos de grupos */
+.group-title {
+  font-size: 12px;
+  color: #f4c542;
+  padding: 5px 15px;
+}
+
+/* Grupos de árbitros */
+.group-list {
+  list-style: none;
   padding: 0;
   margin: 0;
-  list-style-type: none;
 }
 
-.referee-group-item {
-  margin-bottom: 15px; /* Separación entre grupos de árbitros */
+.group-list .list-item {
+  padding-left: 25px;
 }
-
-.group-name {
-  font-weight: bold;
-  color: #ffc107; /* Amarillo para destacar los grupos */
-  font-size: 16px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-/* Lista de árbitros dentro de cada grupo */
-.referee-list {
-  padding: 0 10px; /* Ajustar indentación */
-  list-style-type: none; /* Sin marcadores */
-  margin: 0;
-}
-
-.referee-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #444; /* Línea sutil para dividir los elementos */
-}
-
-.referee-item:last-child {
-  border-bottom: none; /* Quitar la línea para el último elemento */
-}
-
-.referee-item:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Fondo sutil al pasar el mouse */
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-/* Nombre del árbitro */
-.referee-name {
-  color: #ffc107; /* Amarillo para destacar */
-  font-size: 14px;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-/* País u organización del árbitro */
-.referee-country {
-  font-size: 12px;
-  color: #999; /* Gris más claro */
-}
-
-/* Botón de expansión */
-.expand-icon {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.expand-icon i {
-  transition: transform 0.3s ease;
-}
-
-.expand-icon i.fa-chevron-up {
-  transform: rotate(180deg);
-}
-
-

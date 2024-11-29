@@ -1,48 +1,89 @@
 <div class="sidebar">
-  <div class="sidebar-header">
-    <h3>Leagues</h3>
-    <button 
-      class="expand-icon" 
-      (click)="toggleShowAll()" 
-      aria-label="Expand or collapse leagues"
-    >
-      <i class="fas" [ngClass]="showAllLeagues ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-    </button>
+  <!-- Sección de Ligas -->
+  <div class="sidebar-section">
+    <h3 class="section-title">
+      LEAGUES
+      <span class="toggle-icon" (click)="toggleShowAll()">
+        <i class="fas" [ngClass]="showAllLeagues ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      </span>
+    </h3>
+    <ul class="item-list">
+      <li *ngFor="let league of displayedLeagues" class="list-item" (click)="viewMatches(league.id)">
+        <img [src]="league.logo" alt="{{ league.name }}" class="item-logo" />
+        <div class="item-details">
+          <span class="item-name">{{ league.name }}</span>
+          <span class="item-subtext">{{ league.country.name || league.country.organization }}</span>
+        </div>
+      </li>
+    </ul>
   </div>
-  
-  <ul class="league-list">
-    <li *ngFor="let league of displayedLeagues" class="league-item">
-      <a (click)="viewMatches(league.id)">
-        <img [src]="league.logo" alt="{{ league.name }}" class="league-logo" />
-        <span class="league-name">{{ league.name }}</span>
-        <div class="league-country">{{ league.country.name || league.country.organization }}</div> <!-- Mostrar país o entidad -->
-      </a>
-    </li>
-  </ul>
 
   <!-- Sección de Árbitros -->
-  <div class="sidebar-header">
-    <h3>Referees</h3>
-    <button 
-      class="expand-icon" 
-      (click)="toggleShowAllReferees()" 
-      aria-label="Expand or collapse referees"
+  <div class="sidebar-section">
+    <h3 class="section-title">
+      REFEREES
+      <span class="toggle-icon" (click)="toggleShowAllReferees()">
+        <i class="fas" [ngClass]="showAllReferees ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      </span>
+    </h3>
+    <ul class="item-list">
+      <li *ngFor="let group of displayedRefereeGroups | keyvalue" class="list-group">
+        <h4 class="group-title">{{ group.key }}</h4>
+        <ul class="group-list">
+          <li *ngFor="let referee of group.value" class="list-item" (click)="viewRefereeDetails(referee.name)">
+            <span class="item-name">{{ referee.name }}</span>
+            <span class="item-subtext">({{ referee.matchesArbitrated }} matches)</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Sección de Equipos -->
+<div class="sidebar-section">
+  <div class="section-header">
+    <h2 class="section-title">TEAMS</h2>
+    <button
+      class="expand-button"
+      (click)="toggleShowAllTeams()"
+      [attr.aria-label]="showAllTeams ? 'Collapse teams list' : 'Expand teams list'"
     >
-      <i class="fas" [ngClass]="showAllReferees ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      <i class="fas" [ngClass]="showAllTeams ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
     </button>
   </div>
-  
-  <ul class="referee-group">
-    <li *ngFor="let group of displayedRefereeGroups | keyvalue" class="referee-group-item">
-      <h4 class="group-name">{{ group.key }}</h4>
-      <ul class="referee-list">
-        <li *ngFor="let referee of group.value" class="referee-item">
-          <a class="referee-link" (click)="viewRefereeDetails(referee.name)">
-            <span class="referee-name">{{ referee.name }}</span>
-            <span class="referee-stats">({{ referee.matchesArbitrated }} matches)</span>
-          </a>          
-        </li>
-      </ul>
+
+  <!-- Barra de búsqueda -->
+  <div class="search-bar">
+    <input
+      type="text"
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (input)="onSearchChange()"
+      placeholder="Search teams..."
+      aria-label="Search teams"
+    />
+  </div>
+
+  <!-- Lista de equipos -->
+  <ul class="teams-list">
+    <li
+      *ngFor="let team of (showAllTeams ? teams : featuredTeams)"
+      class="team-item"
+    >
+      <button 
+        class="team-button" 
+        (click)="viewTeamDetails(team.id)"
+        [attr.aria-label]="'View details for ' + team.name"
+      >
+        <img [src]="team.logo" [alt]="team.name + ' logo'" class="team-logo" />
+        <div class="team-info">
+          <span class="team-name">{{ team.name }}</span>
+          <span class="team-country">{{ team.country }}</span>
+          <span *ngIf="team.venue?.name" class="team-venue">
+            {{ team.venue.name }} - {{ team.venue.city }}
+          </span>
+        </div>
+      </button>
     </li>
   </ul>
 </div>

@@ -81,6 +81,12 @@ export class FootballService {
     return this.http.get(`${this.apiUrl}/teams`, { params });
   }
   
+  getTeamOverview(teamId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/team-details/${teamId}/overview`);
+  }
+  
+  
+  
   
   
   

@@ -1,36 +1,55 @@
-<div class="team-details" *ngIf="team; else loadingTemplate">
-    <!-- Encabezado del equipo -->
-    <div class="team-header">
-      <img [src]="team.team.logo" alt="{{ team.team.name }}" class="team-logo" />
-      <div class="team-info">
-        <h1>{{ team.team.name }}</h1>
-        <p>{{ team.team.country }}</p>
-        <p>Founded: {{ team.team.founded }}</p>
+<div class="team-overview">
+  <div class="team-header">
+    <img [src]="team?.logo" alt="{{ team?.name }}" class="team-logo" />
+    <div class="team-info">
+      <h1 class="team-name">{{ team?.name }}</h1>
+      <p class="team-country">{{ team?.country }}</p>
+    </div>
+  </div>
+
+  <div class="next-match-section">
+    <h2 class="section-title">Next Match</h2>
+    <div class="next-match-card" (click)="navigateToMatchDetails(nextMatch?.fixture.id)">
+      <div class="team-next">
+        <img [src]="nextMatch?.teams.home.logo" alt="{{ nextMatch?.teams.home.name }}" />
+        <p>{{ nextMatch?.teams.home.name }}</p>
       </div>
-    </div>
-  
-    <!-- Detalles del estadio -->
-    <div class="team-venue">
-      <h2>Stadium: {{ team.venue.name }}</h2>
-      <p>Address: {{ team.venue.address }}</p>
-      <p>Capacity: {{ team.venue.capacity }}</p>
-      <img [src]="team.venue.image" alt="{{ team.venue.name }}" class="stadium-image" />
-    </div>
-  
-    <!-- Lista de partidos -->
-    <div class="team-matches">
-      <h2>Played Matches</h2>
-      <ul>
-        <li *ngFor="let match of matches">
-          <strong>{{ match.fixture.date | date: 'medium' }}</strong>
-          {{ match.teams.home.name }} vs {{ match.teams.away.name }}
-          <span>{{ match.goals.home }} - {{ match.goals.away }}</span>
-        </li>
-      </ul>
+      <div class="match-info">
+        <p class="match-time">{{ nextMatch?.fixture.date | date: 'shortTime' }}</p>
+        <p class="match-date">{{ nextMatch?.fixture.date | date: 'dd MMM' }}</p>
+      </div>
+      <div class="team-next">
+        <img [src]="nextMatch?.teams.away.logo" alt="{{ nextMatch?.teams.away.name }}" />
+        <p>{{ nextMatch?.teams.away.name }}</p>
+      </div>
     </div>
   </div>
   
-  <ng-template #loadingTemplate>
-    <p>Loading team details...</p>
-  </ng-template>
+  <div class="recent-matches">
+    <h2>FORM</h2>
+    <div
+      class="match-card"
+      *ngFor="let match of recentMatches"
+      (click)="navigateToMatchDetails(match.fixture.id)"
+    >
+      <div class="team-match">
+        <img [src]="match.teams.home.logo" [alt]="match.teams.home.name" />
+        <span class="match-info">{{ match.teams.home.name }}</span>
+      </div>
+      <div class="match-score">
+        <span>{{ match.goals.home }}</span>
+        <span class="text-vs">-</span>
+        <span>{{ match.goals.away }}</span>
+      </div>
+      <div class="team-match">
+        <img [src]="match.teams.away.logo" [alt]="match.teams.away.name" />
+        <span class="match-info">{{ match.teams.away.name }}</span>
+      </div>
+    </div>
+  </div>
   
+
+    <!-- See All Button -->
+    <button class="see-all" (click)="navigateToAllMatches()">See All</button>
+  </div>
+

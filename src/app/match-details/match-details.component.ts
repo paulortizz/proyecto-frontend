@@ -11,12 +11,12 @@ import { CommonModule, Location } from '@angular/common';
   imports: [CommonModule],
 })
 export class MatchDetailsComponent implements OnInit {
-  matchDetails: any = null;
-  lineups: any[] = [];
-  isLoading: boolean = true;
-  errorMessage: string = '';
-  activeTab: string = 'events';
-  combinedStatistics: any[] = [];
+  matchDetails: any = null; // Información del partido
+  lineups: any[] = []; // Alineaciones del partido
+  isLoading: boolean = true; // Estado de carga
+  errorMessage: string = ''; // Mensaje de error
+  activeTab: string = 'events'; // Pestaña activa
+  combinedStatistics: any[] = []; // Estadísticas combinadas del partido
 
   constructor(
     private readonly footballService: FootballService,
@@ -25,23 +25,21 @@ export class MatchDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const matchId = params['id'];
-      if (matchId) {
-        const numericMatchId = parseInt(matchId, 10);
-        if (!isNaN(numericMatchId)) {
-          this.handleMatchLoading(numericMatchId);
-        } else {
-          this.setError('Invalid match ID.');
-        }
+    const matchId = this.route.snapshot.paramMap.get('id'); // Obtener el ID del partido desde la URL
+    if (matchId) {
+      const numericMatchId = parseInt(matchId, 10);
+      if (!isNaN(numericMatchId)) {
+        this.handleMatchLoading(numericMatchId);
       } else {
         this.setError('Invalid match ID.');
       }
-    });
+    } else {
+      this.setError('Invalid match ID.');
+    }
   }
 
   goBack(): void {
-    this.location.back();
+    this.location.back(); // Navegar hacia atrás
   }
 
   private handleMatchLoading(matchId: number): void {
@@ -59,6 +57,7 @@ export class MatchDetailsComponent implements OnInit {
         } else {
           this.setError('Match details not found.');
         }
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading match details:', error);

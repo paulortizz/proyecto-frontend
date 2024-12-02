@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FootballService } from '../football.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -9,13 +9,13 @@ import { Subscription } from 'rxjs';
   standalone: true,
   templateUrl: './team-details.component.html',
   styleUrls: ['./team-details.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
 })
 export class TeamDetailsComponent implements OnInit, OnDestroy {
   team: any = null; // Información del equipo
   nextMatch: any = null; // Próximo partido
   recentMatches: any[] = []; // Últimos partidos
-  matches: any[] = []; // Partidos (si hay necesidad adicional)
+  matches: any[] = []; // Todos los partidos categorizados por liga (si es necesario)
   isLoading = true;
   errorMessage = '';
   season: string = new Date().getFullYear().toString(); // Temporada actual
@@ -48,26 +48,39 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
         this.recentMatches = response.data.recentMatches;
         this.isLoading = false;
       },
-      error: (error: any) => { // Añade `: any` al parámetro
+      error: (error: any) => {
         console.error('Error loading team overview:', error);
         this.errorMessage = 'Failed to load team overview.';
         this.isLoading = false;
       },
     });
   }
-  
+
+  // Cargar todos los partidos del equipo categorizados por liga
   loadTeamMatches(teamId: number): void {
-    this.footballService.getTeamMatches(teamId, this.season).subscribe({
-      next: (response) => {
-        this.matches = response.data || []; // Ajuste para evitar fallos si no hay partidos
+    this.footballService.getAllMatchesByTeam(teamId.toString()).subscribe({
+      next: (response: any) => {
+        this.matches = response.data || [];
       },
-      error: (error: any) => { // Añade `: any` al parámetro
+      error: (error: any) => {
         console.error('Error loading team matches:', error);
         this.errorMessage = 'Failed to load team matches.';
       },
     });
   }
-  
+
+  // Navegar a los detalles de un partido
+  navigateToMatchDetails(matchId: number): void {
+    this.router.navigate(['/match', matchId]);
+  }
+
+  // Navegar a la sección de todos los partidos del equipo
+  navigateToAllMatches(): void {
+    const teamId = this.team?.id;
+    if (teamId) {
+      this.router.navigate([`/team/${teamId}/matches`]);
+    }
+  }
 
   // Cancelar suscripciones al destruir el componente
   ngOnDestroy(): void {
@@ -75,19 +88,4 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
       this.routeSub.unsubscribe();
     }
   }
-
-  navigateToMatchDetails(matchId: number): void {
-    this.router.navigate(['/match', matchId]);
-  }
-
-  navigateToAllMatches(): void {
-    // Lógica para redirigir a la sección de todos los partidos
-    console.log('Navigating to all matches...');
-    // Si tienes una ruta específica para todos los partidos
-    const teamId = this.team?.id;
-    if (teamId) {
-      this.router.navigate([`/team/${teamId}/matches`]);
-    }
-  }
-  
 }

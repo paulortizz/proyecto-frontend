@@ -1,0 +1,28 @@
+<div class="matches-container" *ngIf="matchesByLeague.length; else noMatches">
+    <div *ngFor="let league of matchesByLeague">
+      <h2>
+        <img [src]="league.leagueLogo" alt="{{ league.leagueName }}" /> {{ league.leagueName }}
+      </h2>
+      <div class="match-card" *ngFor="let match of league.matches">
+        <div class="team-match">
+          <img [src]="match.homeTeam.logo" [alt]="match.homeTeam.name" />
+          <span>{{ match.homeTeam.name }}</span>
+        </div>
+        <div class="match-score">
+          <span>{{ match.goals.home }}</span>
+          <span>-</span>
+          <span>{{ match.goals.away }}</span>
+        </div>
+        <div class="team-match">
+          <img [src]="match.awayTeam.logo" [alt]="match.awayTeam.name" />
+          <span>{{ match.awayTeam.name }}</span>
+        </div>
+        <p>{{ match.date | date: 'short' }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noMatches>
+    <p>No matches found for this team.</p>
+  </ng-template>
+  

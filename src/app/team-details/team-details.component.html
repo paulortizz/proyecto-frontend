@@ -7,6 +7,45 @@
     </div>
   </div>
 
+  <!-- Navigation Tabs -->
+  <nav class="team-tabs">
+    <a
+      [routerLink]="['overview']"
+      routerLinkActive="active-tab"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Overview
+    </a>
+    <a
+  [routerLink]="['matches']"
+  routerLinkActive="active-tab"
+>
+  Matches
+</a>
+
+    <a
+      [routerLink]="['tables']"
+      routerLinkActive="active-tab"
+    >
+      Tables
+    </a>
+    <a
+      [routerLink]="['news']"
+      routerLinkActive="active-tab"
+    >
+      News
+    </a>
+    <a
+      [routerLink]="['player-stats']"
+      routerLinkActive="active-tab"
+    >
+      Player Stats
+    </a>
+  </nav>
+
+  <!-- Router Outlet for Tabs -->
+  <router-outlet></router-outlet>
+
   <div class="next-match-section">
     <h2 class="section-title">Next Match</h2>
     <div class="next-match-card" (click)="navigateToMatchDetails(nextMatch?.fixture.id)">
@@ -24,7 +63,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="recent-matches">
     <h2>FORM</h2>
     <div
@@ -47,9 +86,7 @@
       </div>
     </div>
   </div>
-  
 
-    <!-- See All Button -->
-    <button class="see-all" (click)="navigateToAllMatches()">See All</button>
-  </div>
-
+  <!-- See All Button -->
+  <button class="see-all" (click)="navigateToAllMatches()">See All</button>
+</div>

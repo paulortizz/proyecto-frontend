@@ -46,6 +46,15 @@ export class FootballService {
       'http://localhost:3000/api/matches/today'
     );
   }
+
+  getAllMatchesByTeam(teamId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/team-details/${teamId}/all-matches`);
+  }
+  
+  
+  
+  
+  
   
 
   

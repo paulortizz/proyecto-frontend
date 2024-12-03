@@ -1,44 +1,27 @@
-<div class="team-overview">
+<div *ngIf="team" class="team-overview">
   <div class="team-header">
-    <img [src]="team?.logo" alt="{{ team?.name }}" class="team-logo" />
+    <img [src]="team?.logo" alt="{{ team?.name || 'Team logo' }}" class="team-logo" />
     <div class="team-info">
-      <h1 class="team-name">{{ team?.name }}</h1>
-      <p class="team-country">{{ team?.country }}</p>
+      <h1 class="team-name">{{ team?.name || 'Team Name' }}</h1>
+      <p class="team-country">{{ team?.country || 'Country' }}</p>
     </div>
   </div>
 
   <!-- Navigation Tabs -->
   <nav class="team-tabs">
-    <a
-      [routerLink]="['overview']"
-      routerLinkActive="active-tab"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
+    <a [routerLink]="['./overview']" routerLinkActive="active-tab" [routerLinkActiveOptions]="{ exact: true }">
       Overview
     </a>
-    <a
-  [routerLink]="['matches']"
-  routerLinkActive="active-tab"
->
-  Matches
-</a>
-
-    <a
-      [routerLink]="['tables']"
-      routerLinkActive="active-tab"
-    >
+    <a [routerLink]="['./matches']" routerLinkActive="active-tab">
+      Matches
+    </a>
+    <a [routerLink]="['./tables']" routerLinkActive="active-tab">
       Tables
     </a>
-    <a
-      [routerLink]="['news']"
-      routerLinkActive="active-tab"
-    >
+    <a [routerLink]="['./news']" routerLinkActive="active-tab">
       News
     </a>
-    <a
-      [routerLink]="['player-stats']"
-      routerLinkActive="active-tab"
-    >
+    <a [routerLink]="['./player-stats']" routerLinkActive="active-tab">
       Player Stats
     </a>
   </nav>
@@ -46,47 +29,64 @@
   <!-- Router Outlet for Tabs -->
   <router-outlet></router-outlet>
 
-  <div class="next-match-section">
-    <h2 class="section-title">Next Match</h2>
-    <div class="next-match-card" (click)="navigateToMatchDetails(nextMatch?.fixture.id)">
-      <div class="team-next">
-        <img [src]="nextMatch?.teams.home.logo" alt="{{ nextMatch?.teams.home.name }}" />
-        <p>{{ nextMatch?.teams.home.name }}</p>
-      </div>
-      <div class="match-info">
-        <p class="match-time">{{ nextMatch?.fixture.date | date: 'shortTime' }}</p>
-        <p class="match-date">{{ nextMatch?.fixture.date | date: 'dd MMM' }}</p>
-      </div>
-      <div class="team-next">
-        <img [src]="nextMatch?.teams.away.logo" alt="{{ nextMatch?.teams.away.name }}" />
-        <p>{{ nextMatch?.teams.away.name }}</p>
-      </div>
+  <ng-container *ngIf="!isLoading">
+    <!-- No Data Message -->
+    <div *ngIf="(!recentMatches || recentMatches.length === 0) && !nextMatch" class="no-data">
+      <p>No matches found for this team.</p>
     </div>
-  </div>
 
-  <div class="recent-matches">
-    <h2>FORM</h2>
-    <div
-      class="match-card"
-      *ngFor="let match of recentMatches"
-      (click)="navigateToMatchDetails(match.fixture.id)"
-    >
-      <div class="team-match">
-        <img [src]="match.teams.home.logo" [alt]="match.teams.home.name" />
-        <span class="match-info">{{ match.teams.home.name }}</span>
-      </div>
-      <div class="match-score">
-        <span>{{ match.goals.home }}</span>
-        <span class="text-vs">-</span>
-        <span>{{ match.goals.away }}</span>
-      </div>
-      <div class="team-match">
-        <img [src]="match.teams.away.logo" [alt]="match.teams.away.name" />
-        <span class="match-info">{{ match.teams.away.name }}</span>
+    <!-- Next Match Section -->
+    <div *ngIf="nextMatch" class="next-match-section">
+      <h2 class="section-title">Next Match</h2>
+      <div
+        class="next-match-card"
+        (click)="navigateToMatchDetails(nextMatch?.fixture?.id)"
+        tabindex="0"
+        role="button"
+        (keydown.enter)="navigateToMatchDetails(nextMatch?.fixture?.id)"
+      >
+        <div class="team-next">
+          <img [src]="nextMatch?.teams?.home?.logo" alt="{{ nextMatch?.teams?.home?.name || 'Home Team' }}" />
+          <p>{{ nextMatch?.teams?.home?.name || 'Home Team' }}</p>
+        </div>
+        <div class="match-info">
+          <p class="match-time">{{ nextMatch?.fixture?.date | date: 'shortTime' }}</p>
+          <p class="match-date">{{ nextMatch?.fixture?.date | date: 'dd MMM' }}</p>
+        </div>
+        <div class="team-next">
+          <img [src]="nextMatch?.teams?.away?.logo" alt="{{ nextMatch?.teams?.away?.name || 'Away Team' }}" />
+          <p>{{ nextMatch?.teams?.away?.name || 'Away Team' }}</p>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Recent Matches Section -->
+    <div class="recent-matches" *ngIf="recentMatches && recentMatches.length > 0">
+      <h2>FORM</h2>
+      <button
+        class="match-card"
+        *ngFor="let match of recentMatches"
+        (click)="navigateToMatchDetails(match.fixture?.id)"
+      >
+        <div class="team-match">
+          <img [src]="match?.teams?.home?.logo" [alt]="match?.teams?.home?.name || 'Home Team'" />
+          <span class="match-info">{{ match?.teams?.home?.name || 'Home Team' }}</span>
+        </div>
+        <div class="match-score">
+          <span>{{ match?.goals?.home || 0 }}</span>
+          <span class="text-vs">-</span>
+          <span>{{ match?.goals?.away || 0 }}</span>
+        </div>
+        <div class="team-match">
+          <img [src]="match?.teams?.away?.logo" [alt]="match?.teams?.away?.name || 'Away Team'" />
+          <span class="match-info">{{ match?.teams?.away?.name || 'Away Team' }}</span>
+        </div>
+      </button>
+    </div>
+  </ng-container>
 
   <!-- See All Button -->
-  <button class="see-all" (click)="navigateToAllMatches()">See All</button>
+  <button class="see-all" [routerLink]="['/team', team?.id, 'matches']" *ngIf="team?.id">
+    See All
+  </button>
 </div>

@@ -1,0 +1,53 @@
+.league-section {
+  margin-bottom: 20px;
+}
+
+.league-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.league-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.match-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.teams {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+}
+
+.team img {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.score {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.match-info {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}

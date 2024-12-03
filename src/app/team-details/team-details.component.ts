@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   imports: [CommonModule, RouterModule],
 })
 export class TeamDetailsComponent implements OnInit, OnDestroy {
-  team: any = null; // Información del equipo
+  team: any = { id: null, name: '', logo: '', country: '' };
   nextMatch: any = null; // Próximo partido
   recentMatches: any[] = []; // Últimos partidos
   matches: any[] = []; // Todos los partidos categorizados por liga (si es necesario)
@@ -34,7 +34,6 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
       if (teamId) {
         this.isLoading = true; // Reinicia el estado de carga
         this.loadTeamOverview(parseInt(teamId, 10));
-        this.loadTeamMatches(parseInt(teamId, 10));
       }
     });
   }
@@ -43,9 +42,11 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
   loadTeamOverview(teamId: number): void {
     this.footballService.getTeamOverview(teamId).subscribe({
       next: (response) => {
-        this.team = response.data.team;
-        this.nextMatch = response.data.nextMatch;
-        this.recentMatches = response.data.recentMatches;
+        if (response?.data) {
+          this.team = response.data.team || {};
+          this.nextMatch = response.data.nextMatch || null;
+          this.recentMatches = response.data.recentMatches || [];
+        }
         this.isLoading = false;
       },
       error: (error: any) => {
@@ -56,29 +57,17 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Cargar todos los partidos del equipo categorizados por liga
-  loadTeamMatches(teamId: number): void {
-    this.footballService.getAllMatchesByTeam(teamId.toString()).subscribe({
-      next: (response: any) => {
-        this.matches = response.data || [];
-      },
-      error: (error: any) => {
-        console.error('Error loading team matches:', error);
-        this.errorMessage = 'Failed to load team matches.';
-      },
-    });
+  // Navegar a la sección de todos los partidos del equipo
+  navigateToAllMatches(): void {
+    if (this.team?.id) {
+      this.router.navigate(['/team', this.team.id, 'matches']);
+    }
   }
 
   // Navegar a los detalles de un partido
   navigateToMatchDetails(matchId: number): void {
-    this.router.navigate(['/match', matchId]);
-  }
-
-  // Navegar a la sección de todos los partidos del equipo
-  navigateToAllMatches(): void {
-    const teamId = this.team?.id;
-    if (teamId) {
-      this.router.navigate([`/team/${teamId}/matches`]);
+    if (matchId) {
+      this.router.navigate(['/match', matchId]);
     }
   }
 

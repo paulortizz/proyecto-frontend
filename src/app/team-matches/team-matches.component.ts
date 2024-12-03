@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FootballService } from '../football.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-team-matches',
   standalone: true,
   templateUrl: './team-matches.component.html',
   styleUrls: ['./team-matches.component.css'],
-  imports: [CommonModule], // Agrega CommonModule aquí
+  imports: [CommonModule],
 })
 export class TeamMatchesComponent implements OnInit {
-  matchesByLeague: { leagueName: string; leagueLogo: string; matches: any[] }[] = [];
+  matchesByLeague: any[] = [];
   isLoading = true;
   errorMessage = '';
 
@@ -21,26 +21,34 @@ export class TeamMatchesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const teamId = params['id']; // ID del equipo desde la URL
+    this.route.paramMap.subscribe((params) => {
+      const teamId = params.get('id'); // Obtén el ID del equipo
       if (teamId) {
         this.loadTeamMatches(teamId);
+      } else {
+        this.errorMessage = 'Team ID not provided.';
+        this.isLoading = false;
       }
     });
   }
 
   loadTeamMatches(teamId: string): void {
-    console.log(`Loading matches for team ID: ${teamId}`); // Esto ayuda a depurar
-    this.footballService.getAllMatchesByTeam(teamId).subscribe({
+    this.isLoading = true; // Mostrar indicador de carga
+    this.footballService.getTeamMatches2(teamId).subscribe({
       next: (response) => {
-        console.log('Matches loaded:', response); // Esto verifica los datos
-        this.matchesByLeague = response.data; // Partidos organizados por liga
+        this.matchesByLeague = response?.data || [];
+        this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error fetching matches:', error);
+      error: (err) => {
+        console.error('Error fetching matches:', err);
         this.errorMessage = 'Failed to load matches.';
+        this.isLoading = false;
       },
     });
   }
-  
+
+  navigateToMatchDetails(fixtureId: number): void {
+    console.log(`Navigating to match details for fixtureId: ${fixtureId}`);
+    // Implementar la lógica de navegación si es necesario
+  }
 }

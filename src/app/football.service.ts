@@ -47,19 +47,13 @@ export class FootballService {
     );
   }
 
-  getAllMatchesByTeam(teamId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/team-details/${teamId}/all-matches`);
+  getTeamMatches2(teamId: string): Observable<{ status: string; data: any[] }> {
+    return this.http.get<{ status: string; data: any[] }>(
+      `${this.apiUrl}/team/${teamId}/matches`
+    );
   }
   
   
-  
-  
-  
-  
-
-  
-  
-
   // Obtener partidos en vivo de una liga específica
   getLiveFixtures(leagueId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/league/fixtures/live/${leagueId}`);
@@ -93,22 +87,14 @@ export class FootballService {
   getTeamOverview(teamId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/team-details/${teamId}/overview`);
   }
-  
-  
-  
-  
-  
-  
+
   getTeamDetails(teamId: number) {
     return this.http.get<any>(`http://localhost:3000/api/teams/${teamId}/details`);
   }
   
   getTeamMatches(teamId: number, season: string) {
     return this.http.get<any>(`http://localhost:3000/api/teams/${teamId}/matches?season=${season}`);
-  }
-  
-  
-  
+  }  
   // Obtener todas las categorías de partidos (en vivo, recientes, próximos)
   getAllMatches(): Observable<any> {
     return forkJoin({

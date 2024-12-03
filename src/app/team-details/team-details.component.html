@@ -60,29 +60,30 @@
       </div>
     </div>
 
-    <!-- Recent Matches Section -->
     <div class="recent-matches" *ngIf="recentMatches && recentMatches.length > 0">
       <h2>FORM</h2>
-      <button
+      <div
         class="match-card"
         *ngFor="let match of recentMatches"
         (click)="navigateToMatchDetails(match.fixture?.id)"
       >
         <div class="team-match">
           <img [src]="match?.teams?.home?.logo" [alt]="match?.teams?.home?.name || 'Home Team'" />
-          <span class="match-info">{{ match?.teams?.home?.name || 'Home Team' }}</span>
+          <span>{{ match?.teams?.home?.name || 'Home Team' }}</span>
         </div>
         <div class="match-score">
-          <span>{{ match?.goals?.home || 0 }}</span>
+          <span>{{ match?.goals?.home ?? '-' }}</span>
           <span class="text-vs">-</span>
-          <span>{{ match?.goals?.away || 0 }}</span>
+          <span>{{ match?.goals?.away ?? '-' }}</span>
         </div>
         <div class="team-match">
           <img [src]="match?.teams?.away?.logo" [alt]="match?.teams?.away?.name || 'Away Team'" />
-          <span class="match-info">{{ match?.teams?.away?.name || 'Away Team' }}</span>
+          <span>{{ match?.teams?.away?.name || 'Away Team' }}</span>
         </div>
-      </button>
+      </div>
     </div>
+    
+    
   </ng-container>
 
   <!-- See All Button -->

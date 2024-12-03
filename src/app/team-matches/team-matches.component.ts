@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FootballService } from '../football.service';
 
 @Component({
@@ -17,12 +17,14 @@ export class TeamMatchesComponent implements OnInit {
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly footballService: FootballService
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const teamId = params.get('id'); // Obtén el ID del equipo
+    // Escuchar los parámetros de la ruta para obtener el teamId dinámicamente
+    this.route.parent?.paramMap.subscribe((params) => {
+      const teamId = params.get('id'); // Obtener el ID del equipo desde la URL
       if (teamId) {
         this.loadTeamMatches(teamId);
       } else {
@@ -32,8 +34,9 @@ export class TeamMatchesComponent implements OnInit {
     });
   }
 
+  // Método para cargar los partidos de un equipo
   loadTeamMatches(teamId: string): void {
-    this.isLoading = true; // Mostrar indicador de carga
+    this.isLoading = true; // Mostrar el indicador de carga
     this.footballService.getTeamMatches2(teamId).subscribe({
       next: (response) => {
         this.matchesByLeague = response?.data || [];
@@ -47,8 +50,9 @@ export class TeamMatchesComponent implements OnInit {
     });
   }
 
-  navigateToMatchDetails(fixtureId: number): void {
-    console.log(`Navigating to match details for fixtureId: ${fixtureId}`);
-    // Implementar la lógica de navegación si es necesario
-  }
-}
+  // Método para navegar a los detalles de un partido (puedes implementarlo si es necesario)
+  navigateToMatchDetails(matchId: number): void {
+    if (matchId) {
+      this.router.navigate(['/match', matchId]);
+    }
+  }}

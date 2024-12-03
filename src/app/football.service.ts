@@ -47,11 +47,10 @@ export class FootballService {
     );
   }
 
-  getTeamMatches2(teamId: string): Observable<{ status: string; data: any[] }> {
-    return this.http.get<{ status: string; data: any[] }>(
-      `${this.apiUrl}/team/${teamId}/matches`
-    );
+  getTeamMatches2(teamId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/team/${teamId}/matches`);
   }
+  
   
   
   // Obtener partidos en vivo de una liga específica

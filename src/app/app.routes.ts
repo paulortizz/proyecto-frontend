@@ -6,7 +6,8 @@ import { RefereeDetailsComponent } from './referee-details/referee-details.compo
 import { TeamDetailsComponent } from './team-details/team-details.component';
 import { TeamMatchesComponent } from './team-matches/team-matches.component';
 import { TeamOverviewComponent } from './team-overview/team-overview.component';
- 
+import { LeagueTableComponent } from './league-table/league-table.component'; // Importa el componente LeagueTable
+
 export const routes: Routes = [
   { path: '', component: SidebarComponent },
   { path: 'league/:id', component: LeagueDetailsComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     children: [
       { path: 'overview', component: TeamOverviewComponent },
       { path: 'matches', component: TeamMatchesComponent },
+      { path: 'tables', component: LeagueTableComponent }, // Ruta para "Tables"
     ],
   },
   { path: 'referee/:leagueId/:name', component: RefereeDetailsComponent },

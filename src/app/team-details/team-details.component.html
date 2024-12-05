@@ -15,9 +15,17 @@
     <a [routerLink]="['./matches']" routerLinkActive="active-tab">
       Matches
     </a>
-    <a [routerLink]="['./tables']" routerLinkActive="active-tab">
-      Tables
-    </a>
+    <a
+    [routerLink]="['./tables']"
+    [queryParams]="{ leagueId: team?.leagueId, season: season }"
+    routerLinkActive="active-tab"
+    (click)="navigateToTables()"
+  >
+    Tables
+  </a>
+  
+
+    
     <a [routerLink]="['./news']" routerLinkActive="active-tab">
       News
     </a>
@@ -82,8 +90,6 @@
         </div>
       </div>
     </div>
-    
-    
   </ng-container>
 
   <!-- See All Button -->

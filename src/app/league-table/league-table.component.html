@@ -1,0 +1,37 @@
+<table class="league-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Team</th>
+      <th>Played</th>
+      <th>W</th>
+      <th>D</th>
+      <th>L</th>
+      <th>GF</th>
+      <th>GA</th>
+      <th>GD</th>
+      <th>Pts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of standings" [ngClass]="getHighlightClass(team.position)">
+      <td>
+        <div class="position-bar">
+          <span>{{ team.position }}</span>
+        </div>
+      </td>
+      <td>
+        <img [src]="team.teamLogo" alt="{{ team.teamName }}" />
+        {{ team.teamName }}
+      </td>
+      <td>{{ team.played }}</td>
+      <td>{{ team.wins }}</td>
+      <td>{{ team.draws }}</td>
+      <td>{{ team.losses }}</td>
+      <td>{{ team.goalsFor }}</td>
+      <td>{{ team.goalsAgainst }}</td>
+      <td>{{ team.goalDifference }}</td>
+      <td>{{ team.points }}</td>
+    </tr>
+  </tbody>
+</table>

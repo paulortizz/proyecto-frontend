@@ -1,0 +1,105 @@
+/* Tabla principal */
+.league-table {
+  width: 100%;
+  border-spacing: 0;
+  color: #fff;
+  background-color: #121212;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  table-layout: fixed;
+}
+
+/* Encabezado de la tabla */
+.league-table thead tr {
+  background-color: #1e1e1e;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.league-table thead th {
+  padding: 10px 5px;
+  text-align: center;
+  border-bottom: 2px solid #333;
+  white-space: nowrap;
+}
+
+/* Cuerpo de la tabla */
+.league-table tbody tr {
+  border-bottom: 1px solid #333;
+  transition: background-color 0.3s ease;
+}
+
+.league-table tbody tr:hover {
+  background-color: #1c1c1c;
+}
+
+/* Columnas */
+.league-table tbody td {
+  text-align: center;
+  padding: 10px 5px;
+  vertical-align: middle;
+}
+
+.league-table tbody td:nth-child(1) {
+  width: 5%; /* Ancho fijo para la posición */
+}
+
+/* Columna de equipo */
+.league-table tbody td:nth-child(2) {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 15px;
+}
+
+/* Imagen del equipo */
+.league-table tbody td img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* Barra de color para la posición */
+/* Barra de color para la posición */
+.position-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  padding-left: 10px; /* Ajustar espacio entre el número y la barra */
+}
+
+.position-bar span {
+  position: relative;
+  z-index: 1;
+  margin-left: 5px; /* Mover el número hacia la derecha */
+}
+
+.position-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 4px; /* Ancho de la barra */
+  border-radius: 2px;
+  background-color: transparent;
+}
+
+/* Colores según posición */
+.highlight-champions .position-bar::before {
+  background-color: #007bff; /* Azul */
+}
+
+.highlight-europa .position-bar::before {
+  background-color: #ffa500; /* Naranja */
+}
+
+.highlight-conference .position-bar::before {
+  background-color: #28a745; /* Verde */
+}
+
+.highlight-relegation .position-bar::before {
+  background-color: #ff4d4d; /* Rojo */
+}

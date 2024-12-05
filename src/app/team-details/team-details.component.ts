@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   imports: [CommonModule, RouterModule],
 })
 export class TeamDetailsComponent implements OnInit, OnDestroy {
-  team: any = { id: null, name: '', logo: '', country: '' };
+  team: any = { id: null, name: '', logo: '', country: '', leagueId: null }; // Datos del equipo
   nextMatch: any = null; // Próximo partido
   recentMatches: any[] = []; // Últimos partidos
   matches: any[] = []; // Todos los partidos categorizados por liga (si es necesario)
@@ -44,8 +44,13 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response?.data) {
           this.team = response.data.team || {};
+          this.team.leagueId = this.team.leagueId || response.data.team?.leagueId || null; // Guardar leagueId para futuras navegaciones
           this.nextMatch = response.data.nextMatch || null;
           this.recentMatches = response.data.recentMatches || [];
+        }
+        console.log('Loaded Team Overview:', this.team);
+        if (!this.team.leagueId) {
+          console.warn('League ID is missing for this team.');
         }
         this.isLoading = false;
       },
@@ -57,10 +62,19 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Navegar a la sección de todos los partidos del equipo
-  navigateToAllMatches(): void {
-    if (this.team?.id) {
-      this.router.navigate(['/team', this.team.id, 'matches']);
+  // Navegar a la sección Tables
+  navigateToTables(): void {
+    if (this.team?.leagueId && this.season) {
+      console.log(`Navigating to tables with leagueId: ${this.team.leagueId}, season: ${this.season}`);
+      this.router.navigate(['/team', this.team.id, 'tables'], {
+        queryParams: {
+          leagueId: this.team.leagueId,
+          season: this.season,
+        },
+      });
+    } else {
+      console.error('League ID or season is missing. Cannot navigate to Tables.');
+      this.errorMessage = 'League ID or season is missing. Please verify the team details.';
     }
   }
 

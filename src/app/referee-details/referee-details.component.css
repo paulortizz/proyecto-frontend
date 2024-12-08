@@ -1,172 +1,47 @@
-/* Contenedor principal */
 .referee-details {
-  font-family: 'Arial', sans-serif;
-  color: #333;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 800px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Encabezado */
-.referee-header {
-  text-align: center;
-  margin-bottom: 20px;
+.referee-details h2 {
+  color: #007bff;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
 }
 
-.referee-header h2 {
-  font-size: 32px;
-  font-weight: bold;
-  color: #f1c40f;
-  margin-bottom: 5px;
-}
-
-.referee-header p {
-  font-size: 18px;
+.referee-details p {
+  font-size: 1rem;
   color: #555;
+  margin: 5px 0;
 }
 
-/* Pestañas */
-.tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #ddd;
+.referee-details h3 {
+  margin-top: 20px;
+  font-size: 1.4rem;
+  border-bottom: 2px solid #007bff;
+  display: inline-block;
 }
 
-.tab {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  color: #666;
-  margin: 0 5px;
-  border-bottom: 3px solid transparent;
-  transition: all 0.3s ease-in-out;
-}
-
-.tab:hover,
-.tab.active {
-  color: #3498db;
-  font-weight: bold;
-  border-bottom: 3px solid #3498db;
-}
-
-/* Contenido de las pestañas */
-.tab-content {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tab-content h3 {
-  font-size: 20px;
-  color: #34495e;
-  margin-bottom: 15px;
-  text-transform: uppercase;
-}
-
-.tab-content p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #555;
-}
-
-/* Estadísticas generales */
-.statistics {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.stat-item {
-  flex: 1 1 100px;
-  text-align: center;
-  font-size: 16px;
-  color: #2c3e50;
-  padding: 10px;
-  background-color: #ecf0f1;
-  border-radius: 5px;
-}
-
-.stat-item span {
-  display: block;
-  font-size: 24px;
-  font-weight: bold;
-  color: #2980b9;
-}
-
-/* Lista de estadios */
-.stadiums-list {
+.referee-details ul {
   list-style: none;
   padding: 0;
-  margin: 0;
 }
 
-.stadiums-list li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #4c4b4b;
-}
-
-.stadiums-list li:last-child {
-  border-bottom: none;
-}
-
-.stadium-name {
-  font-weight: bold;
-}
-
-.stadium-count {
-  color: #888;
-}
-
-/* Partidos recientes */
-.matches-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.matches-list li {
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
-}
-
-.matches-list li:last-child {
-  border-bottom: none;
-}
-
-.match-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #666;
-}
-
-.match-info span {
-  display: block;
-}
-
-.match-teams {
-  font-weight: bold;
-  font-size: 16px;
+.referee-details ul li {
+  font-size: 1rem;
   color: #333;
+  padding: 5px 0;
 }
 
-/* Responsividad */
-@media (max-width: 768px) {
-  .statistics {
-    flex-direction: column;
-    gap: 10px;
-  }
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+}
 
-  .tab-content {
-    padding: 15px;
-  }
+.error {
+  color: red;
+  text-align: center;
+  font-size: 1.2rem;
 }

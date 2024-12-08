@@ -64,6 +64,11 @@ export class SidebarComponent implements OnInit {
   viewTeamDetails(teamId: number): void {
     this.router.navigate(['/team', teamId]);
   }
+  getObjectKeys(obj: { [key: string]: any[] }): string[] {
+    return Object.keys(obj);
+  }
+  
+  
 
   get featuredLeagues(): any[] {
     return this.leagues.filter((league) =>
@@ -119,10 +124,12 @@ export class SidebarComponent implements OnInit {
       console.warn('No league selected, skipping referee load.');
       return;
     }
+  
     this.footballService.getRefereesOverview(leagueId, season).subscribe({
       next: (data: any) => {
         if (data && data.status === 'success') {
-          this.refereeGroups = data.data || {}; // Agrupado por país u organización
+          // La respuesta es una lista de árbitros
+          this.refereeGroups = { Referees: data.data }; // Colocar los árbitros bajo una clave "Referees"
           this.displayedRefereeGroups = this.limitRefereeGroups(); // Mostrar árbitros limitados inicialmente
         } else {
           console.warn('No hay datos de árbitros disponibles.');
@@ -134,6 +141,8 @@ export class SidebarComponent implements OnInit {
         console.error('Error al obtener árbitros para la liga:', error),
     });
   }
+  
+  
    
   // Método para cargar equipos por liga y temporada
 loadTeams(leagueId: number | null, season: string): void {

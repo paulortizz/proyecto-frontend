@@ -1,0 +1,31 @@
+<div class="player-details-container">
+    <div *ngIf="isLoading" class="loading-indicator">Loading player data...</div>
+    <div *ngIf="!isLoading && errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="!isLoading && playerInfo">
+      <!-- Tarjeta de Información del Jugador -->
+      <div class="card">
+        <div class="player-header">
+          <img [src]="playerInfo.photo" alt="{{ playerInfo.fullName }}" class="player-photo" />
+          <h2 class="player-name">{{ playerInfo.fullName }}</h2>
+        </div>
+        <div class="player-details">
+          <p><span class="icon"><i class="fas fa-calendar-alt"></i></span><strong>Age:</strong> {{ playerInfo.age }}</p>
+          <p><span class="icon"><i class="fas fa-flag"></i></span><strong>Nationality:</strong> {{ playerInfo.nationality }}</p>
+          <p><span class="icon"><i class="fas fa-map-marker-alt"></i></span><strong>Birthplace:</strong> {{ playerInfo.birth.place }}, {{ playerInfo.birth.country }}</p>
+          <p><span class="icon"><i class="fas fa-birthday-cake"></i></span><strong>Date of Birth:</strong> {{ playerInfo.birth.date }}</p>
+        </div>
+      </div>
+  
+      <!-- Tarjeta de Equipo Actual -->
+      <div class="card">
+        <h3 class="section-title">CURRENT TEAM</h3>
+        <div class="team-details">
+          <img [src]="playerInfo.currentTeam.logo" alt="{{ playerInfo.currentTeam.name }}" class="team-logo" />
+          <div>
+            <p class="team-name">{{ playerInfo.currentTeam.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

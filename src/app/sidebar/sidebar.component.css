@@ -188,3 +188,42 @@
 .search-bar input:focus::placeholder {
   color: #666; /* Cambiar el color del marcador de posición al enfocar */
 }
+
+/* Estilo para la sección de árbitros */
+.referee-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 15px;
+}
+
+.referee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #333; /* Línea divisoria */
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.referee-item:hover {
+  background-color: #2a2a2a;
+}
+
+.referee-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.referee-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.referee-matches {
+  font-size: 12px;
+  color: #ccc;
+  margin-left: 10px;
+}

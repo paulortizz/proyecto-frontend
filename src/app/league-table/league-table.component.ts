@@ -59,7 +59,7 @@ export class LeagueTableComponent implements OnInit {
 
         if (this.standings.length > 0) {
           // Setear el nombre y logo de la liga basado en el primer equipo
-          this.leagueName = 'LaLiga'; // Cambiar si es dinámico
+          this.leagueName = ''; // Cambiar si es dinámico
           this.leagueLogo = this.standings[0]?.teamLogo || '';
         } else {
           this.errorMessage = 'No standings available for this league.';

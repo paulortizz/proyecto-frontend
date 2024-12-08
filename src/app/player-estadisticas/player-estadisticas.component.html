@@ -1,0 +1,77 @@
+<div class="player-stats-container">
+  <h2 class="section-title">PLAYER STATS</h2>
+
+  <!-- Filtros de estadísticas -->
+  <div class="stat-filters">
+    <button
+      class="filter-button"
+      [class.active]="selectedFilter === 'all'"
+      (click)="filterStats('all')"
+    >
+      ALL
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="selectedFilter === 'goals'"
+      (click)="filterStats('goals')"
+    >
+      GOALS
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="selectedFilter === 'assists'"
+      (click)="filterStats('assists')"
+    >
+      ASSISTS
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="selectedFilter === 'shots'"
+      (click)="filterStats('shots')"
+    >
+      SHOTS ON TARGET
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="selectedFilter === 'yellow'"
+      (click)="filterStats('yellow')"
+    >
+      YELLOW CARDS
+    </button>
+    <button
+      class="filter-button"
+      [class.active]="selectedFilter === 'red'"
+      (click)="filterStats('red')"
+    >
+      RED CARDS
+    </button>
+  </div>
+
+  <!-- Lista de estadísticas -->
+  <div class="stats-list">
+    <div
+      class="stat-item"
+      *ngFor="let player of filteredStats"
+      (click)="viewPlayerDetails(player.playerId)"
+    >
+      <div class="player-info">
+        <img
+          [src]="'https://media.api-sports.io/football/players/' + player.playerId + '.png'"
+          alt="{{ player.playerName }}"
+          class="player-photo"
+        />
+        <div class="player-details">
+          <p class="player-name">{{ player.playerName }}</p>
+          <p class="team-name">{{ player.teamName }}</p>
+        </div>
+      </div>
+      <div class="player-stats">
+        <span class="stat">{{ player.goals }} Goals</span>
+        <span class="stat">{{ player.assists }} Assists</span>
+        <span class="stat">{{ player.shotsOnTarget }} Shots</span>
+        <span class="stat">{{ player.yellowCards }} Yellow</span>
+        <span class="stat">{{ player.redCards }} Red</span>
+      </div>
+    </div>
+  </div>
+</div>

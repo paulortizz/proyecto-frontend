@@ -1,73 +1,15 @@
-<div class="referee-details" *ngIf="referee; else loadingTemplate">
-  <!-- Header del árbitro -->
-  <div class="referee-header">
-    <h1 class="referee-name">{{ referee.name }}</h1>
-    <h3 class="referee-organization">{{ referee.countryOrOrganization }}</h3>
-  </div>
+<div *ngIf="isLoading">Loading...</div>
+<div *ngIf="!isLoading && referee">
+  <h2>{{ referee.name }}</h2>
+  <p>Matches Arbitrated: {{ referee.matchesArbitrated }}</p>
+  <p>Yellow Cards: {{ referee.yellowCards }}</p>
+  <p>Red Cards: {{ referee.redCards }}</p>
 
-  <!-- Pestañas -->
-  <div class="tabs">
-    <button [class.active]="selectedTab === 'statistics'" (click)="changeTab('statistics')">
-      Statistics
-    </button>
-    <button [class.active]="selectedTab === 'stadiums'" (click)="changeTab('stadiums')">
-      Stadiums
-    </button>
-    <button [class.active]="selectedTab === 'matches'" (click)="changeTab('matches')">
-      Matches
-    </button>
-  </div>
-
-  <!-- Contenido de las pestañas -->
-  <div class="tab-content">
-    <!-- Estadísticas -->
-    <div *ngIf="selectedTab === 'statistics'">
-      <h2 class="section-title">Statistics</h2>
-      <div class="statistics">
-        <div class="stat-item">
-          <span class="stat-value">{{ referee.matchesArbitrated }}</span>
-          <span class="stat-label">Matches Arbitrated</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ referee.yellowCards }}</span>
-          <span class="stat-label">Yellow Cards</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ referee.redCards }}</span>
-          <span class="stat-label">Red Cards</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Estadios -->
-    <div *ngIf="selectedTab === 'stadiums'">
-      <h2 class="section-title">Most Common Stadiums</h2>
-      <ul class="stadiums-list">
-        <li *ngFor="let stadium of referee.mostCommonStadiums | keyvalue">
-          <span class="stadium-name">{{ stadium.key }}</span>
-          <span class="stadium-count">{{ stadium.value }} matches</span>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Últimos partidos -->
-    <div *ngIf="selectedTab === 'matches'">
-      <h2 class="section-title">Last 5 Matches</h2>
-      <ul class="matches-list">
-        <li *ngFor="let match of referee.lastFiveMatches">
-          <div class="match-info">
-            <span><strong>Date:</strong> {{ match.date | date: 'fullDate' }}</span>
-            <span><strong>Match:</strong> {{ match.home }} vs {{ match.away }}</span>
-            <span><strong>Score:</strong> {{ match.score }}</span>
-            <span><strong>Stadium:</strong> {{ match.stadium }}</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <h3>Most Common Stadiums:</h3>
+  <ul>
+    <li *ngFor="let stadium of referee.mostCommonStadiums">
+      {{ stadium.stadium }} ({{ stadium.count }} matches)
+    </li>
+  </ul>
 </div>
-
-<!-- Cargando detalles -->
-<ng-template #loadingTemplate>
-  <p class="loading-message">Loading referee details...</p>
-</ng-template>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>

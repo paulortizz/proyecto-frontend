@@ -44,13 +44,18 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response?.data) {
           this.team = response.data.team || {};
-          this.team.leagueId = this.team.leagueId || response.data.team?.leagueId || null; // Guardar leagueId para futuras navegaciones
+          // Asegurar que leagueId y season se establezcan correctamente
+          this.team.leagueId = response.data.team?.leagueId || null;
+          this.team.season = response.data.team?.season || null; // Incluye la temporada
           this.nextMatch = response.data.nextMatch || null;
           this.recentMatches = response.data.recentMatches || [];
         }
         console.log('Loaded Team Overview:', this.team);
-        if (!this.team.leagueId) {
-          console.warn('League ID is missing for this team.');
+
+        // Validación adicional si leagueId o season están ausentes
+        if (!this.team.leagueId || !this.team.season) {
+          console.warn('League ID or season is missing for this team.');
+          this.errorMessage = 'This team does not have an associated league or season for stats.';
         }
         this.isLoading = false;
       },
@@ -60,7 +65,8 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
     });
-  }
+}
+
 
   // Navegar a la sección Tables
   navigateToTables(): void {
@@ -73,7 +79,7 @@ export class TeamDetailsComponent implements OnInit, OnDestroy {
         },
       });
     } else {
-      console.error('League ID or season is missing. Cannot navigate to Tables.');
+      console.error(`League ID or season is missing. League ID: ${this.team?.leagueId}, Season: ${this.season}`);
       this.errorMessage = 'League ID or season is missing. Please verify the team details.';
     }
   }

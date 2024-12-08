@@ -54,9 +54,19 @@ export class FootballService {
   getStandings2(leagueId: string, season: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/tablas/${leagueId}/${season}`);
   }
-  
+
+  getPlayerStats(leagueId: number, season: string, teamId: number) {
+    return this.http.get<any>(
+      `http://localhost:3000/api/players/stats?leagueId=${leagueId}&season=${season}&teamId=${teamId}`
+    );
+  }
   
 
+  getPlayerInfo(playerId: string, season: string): Observable<any> {
+    const url = `${this.apiUrl}/info/?playerId=${playerId}&season=${season}`;
+    return this.http.get<any>(url);
+  }
+  
   // Obtener partidos en vivo de una liga específica
   getLiveFixtures(leagueId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/league/fixtures/live/${leagueId}`);

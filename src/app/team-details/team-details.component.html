@@ -23,15 +23,19 @@
   >
     Tables
   </a>
-  
 
-    
-    <a [routerLink]="['./news']" routerLinkActive="active-tab">
-      News
-    </a>
-    <a [routerLink]="['./player-stats']" routerLinkActive="active-tab">
-      Player Stats
-    </a>
+  <!-- Player Stats Tab -->
+<a
+[routerLink]="['./player-stats']"
+[queryParams]="{ teamId: team?.id, leagueId: team?.leagueId, season: season }"
+routerLinkActive="active-tab"
+>
+Player Stats
+</a>
+
+
+
+
   </nav>
 
   <!-- Router Outlet for Tabs -->

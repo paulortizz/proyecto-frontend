@@ -18,26 +18,34 @@
     </ul>
   </div>
 
-  <!-- Sección de Árbitros -->
-  <div class="sidebar-section">
-    <h3 class="section-title">
-      REFEREES
-      <span class="toggle-icon" (click)="toggleShowAllReferees()">
-        <i class="fas" [ngClass]="showAllReferees ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-      </span>
-    </h3>
-    <ul class="item-list">
-      <li *ngFor="let group of displayedRefereeGroups | keyvalue" class="list-group">
-        <h4 class="group-title">{{ group.key }}</h4>
-        <ul class="group-list">
-          <li *ngFor="let referee of group.value" class="list-item" (click)="viewRefereeDetails(referee.name)">
-            <span class="item-name">{{ referee.name }}</span>
-            <span class="item-subtext">({{ referee.matchesArbitrated }} matches)</span>
-          </li>
-        </ul>
+ <!-- Sección de Árbitros -->
+<!-- Sección de Árbitros -->
+<div class="sidebar-section">
+  <h3 (click)="toggleShowAllReferees()" class="sidebar-title">
+    REFEREES
+    <span class="toggle-icon">
+      <i [ngClass]="showAllReferees ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </span>
+  </h3>
+  <div *ngFor="let country of getObjectKeys(displayedRefereeGroups)">
+    <h4 class="referee-country">{{ country }}</h4>
+    <ul class="referee-list">
+      <li
+        *ngFor="let referee of displayedRefereeGroups[country]"
+        class="referee-item"
+        (click)="viewRefereeDetails(referee.name)"
+      >
+        <div class="referee-info">
+          <span class="referee-name">{{ referee.name }}</span>
+          <span class="referee-matches">({{ referee.matchesArbitrated }} matches)</span>
+        </div>
       </li>
     </ul>
   </div>
+</div>
+
+
+  
 
  <!-- Sección de Equipos -->
  <div class="sidebar-section">

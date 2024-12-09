@@ -17,13 +17,13 @@ export class MatchesTodayComponent implements OnInit {
   errorMessage: string = '';
   activeFilter: string = 'all';
   expandedLeagues: { [key: number]: boolean } = {};
-  favoriteMatches: number[] = []; // IDs de partidos favoritos
+  favoriteMatches: any[] = []; // Cambiado para manejar objetos completos
 
   constructor(private readonly footballService: FootballService) {}
 
   ngOnInit(): void {
     this.loadMatchesToday();
-    this.loadFavorites(); // Cargar favoritos desde LocalStorage
+    this.loadFavorites();
   }
 
   loadMatchesToday(): void {
@@ -57,7 +57,6 @@ export class MatchesTodayComponent implements OnInit {
             match?.fixture?.status?.short === 'LIVE' ||
             match?.fixture?.status?.short === 'HT'
         );
-        console.log('Partidos en vivo:', filteredMatches);
         break;
       case 'finished':
         filteredMatches = this.matches.filter(
@@ -127,18 +126,32 @@ export class MatchesTodayComponent implements OnInit {
     localStorage.setItem('favoriteMatches', JSON.stringify(this.favoriteMatches));
   }
 
-  toggleFavorite(matchId: number): void {
-    if (this.favoriteMatches.includes(matchId)) {
-      this.favoriteMatches = this.favoriteMatches.filter((id) => id !== matchId);
+  toggleFavorite(match: any): void {
+    const favoriteIndex = this.favoriteMatches.findIndex((fav) => fav.id === match.fixture.id);
+
+    if (favoriteIndex !== -1) {
+        // Si ya es favorito, eliminarlo
+        this.favoriteMatches.splice(favoriteIndex, 1);
     } else {
-      this.favoriteMatches.push(matchId);
+        // Si no es favorito, agregarlo
+        const favoriteMatch = {
+            id: match.fixture.id,
+            homeLogo: match.teams.home.logo,
+            homeName: match.teams.home.name,
+            awayLogo: match.teams.away.logo,
+            awayName: match.teams.away.name,
+            homeScore: match.goals.home ?? '-',
+            awayScore: match.goals.away ?? '-',
+            status: this.getMatchStatus(match),
+        };
+        this.favoriteMatches.push(favoriteMatch);
     }
     this.saveFavorites();
-  }
+}
 
-  isFavorite(matchId: number): boolean {
-    return this.favoriteMatches.includes(matchId);
-  }
 
-  
+
+isFavorite(matchId: number): boolean {
+  return this.favoriteMatches.some((fav) => fav.id === matchId);
+}
 }

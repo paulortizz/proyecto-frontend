@@ -91,19 +91,19 @@
             <!-- Marcador e ícono de favoritos -->
             <div class="match-actions">
               <div class="score">
-                <span>{{ match?.goals?.home ?? '-' }}</span>
-                <span>-</span>
-                <span>{{ match?.goals?.away ?? '-' }}</span>
+                  <span>{{ match.goals.home ?? '-' }}</span>
+                  <span>-</span>
+                  <span>{{ match.goals.away ?? '-' }}</span>
               </div>
-              <!-- Ícono de favoritos -->
-              <div class="favorite-icon" (click)="toggleFavorite(match.fixture.id); $event.stopPropagation()">
-                <img
-                  [src]="isFavorite(match.fixture.id) ? 'assets/icons/fav.png' : 'assets/icons/fav.png'"
-                  alt="Favorite Icon"
-                  class="favorite-img"
-                />
+              <div class="favorite-icon" (click)="toggleFavorite(match)">
+                  <img
+                      [src]="isFavorite(match.fixture.id) ? 'assets/icons/fav-gold.png' : 'assets/icons/fav.png'"
+                      alt="Favorite Icon"
+                      class="favorite-img"
+                  />
               </div>
-            </div>
+          </div>
+          
           </div>
         </div>
       </div>

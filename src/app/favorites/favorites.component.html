@@ -1,32 +1,30 @@
 <div class="favorites-container">
-    <!-- Tabs -->
-    <div class="tabs">
-      <span class="tab active">Matches</span>
-      <span class="tab">Teams</span>
+  <h2>MATCHES</h2>
+  <ng-container *ngFor="let group of groupedFavorites">
+    <div class="status-group">
+      <h3>{{ group.status }}</h3>
+      <div *ngFor="let match of group.matches" class="match-card">
+        <a [routerLink]="['/match', match.id]" class="match-details">
+          <div class="teams">
+            <div class="team">
+              <img [src]="match.homeLogo" alt="{{ match.homeName }}" class="team-logo" />
+              <span class="team-name">{{ match.homeName }}</span>
+            </div>
+            <div class="match-info">
+              <div class="time">{{ match.time }}</div>
+              <div class="score">{{ match.homeScore }} - {{ match.awayScore }}</div>
+              <div class="status">{{ match.status }}</div>
+            </div>
+            <div class="team">
+              <img [src]="match.awayLogo" alt="{{ match.awayName }}" class="team-logo" />
+              <span class="team-name">{{ match.awayName }}</span>
+            </div>
+          </div>
+        </a>
+        <div class="favorite-icon" (click)="removeMatchFromFavorites(match.id)">
+          <img src="assets/icons/fav-gold.png" alt="Remove from favorites" />
+        </div>
+      </div>
     </div>
-  
-    <!-- Matches Section -->
-    <div class="section">
-      <h3>Matches</h3>
-      <p *ngIf="favoriteMatches.length === 0">Tap ⭐ to add a Match to Favorites</p>
-      <ul>
-        <li *ngFor="let match of favoriteMatches">
-          <span>{{ match.name }}</span>
-          <i class="fas fa-star" (click)="removeMatchFromFavorites(match.id)"></i>
-        </li>
-      </ul>
-    </div>
-  
-    <!-- Teams Section -->
-    <div class="section">
-      <h3>Teams</h3>
-      <p *ngIf="favoriteTeams.length === 0">Tap ⭐ to add a Team to Favorites</p>
-      <ul>
-        <li *ngFor="let team of favoriteTeams">
-          <span>{{ team.name }}</span>
-          <i class="fas fa-star" (click)="removeTeamFromFavorites(team.id)"></i>
-        </li>
-      </ul>
-    </div>
-  </div>
-  
+  </ng-container>
+</div>

@@ -225,3 +225,29 @@
   font-weight: bold;
   color: #ffffff;
 }
+.favorite-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.favorite-img {
+  width: 24px; /* Ajusta el tamaño de la imagen */
+  height: 24px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.favorite-icon:hover .favorite-img {
+  transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
+  opacity: 0.8;
+}
+
+.match-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  min-width: 120px;
+}

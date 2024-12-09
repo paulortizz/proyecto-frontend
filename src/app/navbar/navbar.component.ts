@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -7,8 +8,13 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  constructor(private readonly router: Router) {}
+  
   isScrolled = false;
-
+   // Nueva función para navegar a la página de favoritos
+   goToFavorites() {
+    this.router.navigate(['/favorites']);
+  }
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const offset = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;

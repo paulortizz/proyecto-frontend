@@ -11,58 +11,54 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
 })
 export class MatchesTodayComponent implements OnInit {
-  matches: any[] = []; // Lista completa de partidos
-  groupedMatches: { league: any; matches: any[] }[] = []; // Partidos agrupados por liga
-  isLoading: boolean = true; // Indicador de carga
-  errorMessage: string = ''; // Mensaje de error si ocurre algo
-  activeFilter: string = 'all'; // Filtro activo: 'all', 'live', 'finished', 'scheduled'
-  expandedLeagues: { [key: number]: boolean } = {}; // Estado de expansión de las ligas
+  matches: any[] = [];
+  groupedMatches: { league: any; matches: any[] }[] = [];
+  isLoading: boolean = true;
+  errorMessage: string = '';
+  activeFilter: string = 'all';
+  expandedLeagues: { [key: number]: boolean } = {};
+  favoriteMatches: number[] = []; // IDs de partidos favoritos
 
   constructor(private readonly footballService: FootballService) {}
 
   ngOnInit(): void {
-    this.loadMatchesToday(); // Cargar partidos al iniciar el componente
+    this.loadMatchesToday();
+    this.loadFavorites(); // Cargar favoritos desde LocalStorage
   }
 
-  /**
-   * Carga los partidos del día actual desde el servicio
-   */
   loadMatchesToday(): void {
     this.footballService.getMatchesToday().subscribe({
       next: (data) => {
         console.log('Partidos cargados:', data);
-        this.matches = data.data?.allMatches || []; // Todos los partidos
-        this.groupMatchesByLeague(this.matches); // Agrupar partidos inicialmente
-        this.isLoading = false; // Finalizar indicador de carga
+        this.matches = data.data?.allMatches || [];
+        this.groupMatchesByLeague(this.matches);
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error al cargar los partidos de hoy:', error);
         this.errorMessage = 'No se pudieron cargar los partidos de hoy.';
-        this.isLoading = false; // Finalizar indicador de carga incluso con error
+        this.isLoading = false;
       },
     });
   }
 
-  /**
-   * Configura el filtro activo y aplica el filtro
-   */
   setFilter(filter: string): void {
     this.activeFilter = filter;
     let filteredMatches: any[] = [];
 
     switch (filter) {
       case 'live':
-      filteredMatches = this.matches.filter(
-        (match) =>
-          match?.fixture?.status?.short === '1H' || // Primer tiempo
-          match?.fixture?.status?.short === '2H' || // Segundo tiempo
-          match?.fixture?.status?.short === 'ET' || // Tiempo extra
-          match?.fixture?.status?.short === 'P' ||  // Penales
-          match?.fixture?.status?.short === 'LIVE' || // En vivo, si existe
-           match?.fixture?.status?.short === 'HT'
-      );
-      console.log('Partidos en vivo:', filteredMatches);
-      break;
+        filteredMatches = this.matches.filter(
+          (match) =>
+            match?.fixture?.status?.short === '1H' ||
+            match?.fixture?.status?.short === '2H' ||
+            match?.fixture?.status?.short === 'ET' ||
+            match?.fixture?.status?.short === 'P' ||
+            match?.fixture?.status?.short === 'LIVE' ||
+            match?.fixture?.status?.short === 'HT'
+        );
+        console.log('Partidos en vivo:', filteredMatches);
+        break;
       case 'finished':
         filteredMatches = this.matches.filter(
           (match) => match?.fixture?.status?.short === 'FT'
@@ -80,9 +76,6 @@ export class MatchesTodayComponent implements OnInit {
     this.groupMatchesByLeague(filteredMatches);
   }
 
-  /**
-   * Agrupa los partidos por liga
-   */
   groupMatchesByLeague(matches: any[]): void {
     const grouped = matches.reduce((acc: any, match: any) => {
       const leagueId = match?.league?.id;
@@ -99,13 +92,11 @@ export class MatchesTodayComponent implements OnInit {
     this.groupedMatches = Object.values(grouped);
   }
 
-  /**
-   * Alterna la visibilidad de los partidos de una liga
-   */
   toggleLeague(leagueId: number): void {
-    if (leagueId < 0) return; // Prevenir IDs no válidos
+    if (leagueId < 0) return;
     this.expandedLeagues[leagueId] = !this.expandedLeagues[leagueId];
   }
+
   getMatchStatus(match: any): string {
     const status = match?.fixture?.status?.short;
     switch (status) {
@@ -116,12 +107,38 @@ export class MatchesTodayComponent implements OnInit {
       case 'LIVE':
         return `LIVE - ${match?.fixture?.status?.elapsed || 0}'`;
       case 'HT':
-        return 'HT'; // Medio tiempo
+        return 'HT';
       case 'FT':
-        return 'FT'; // Finalizado
+        return 'FT';
       case 'NS':
-        return 'Scheduled'; // Aún no empieza
+        return 'Scheduled';
       default:
-        return 'Unknown'; // Por si hay estados desconocidos
-    }}
+        return 'Unknown';
+    }
+  }
+
+  // Gestión de favoritos
+  loadFavorites(): void {
+    const storedFavorites = localStorage.getItem('favoriteMatches');
+    this.favoriteMatches = storedFavorites ? JSON.parse(storedFavorites) : [];
+  }
+
+  saveFavorites(): void {
+    localStorage.setItem('favoriteMatches', JSON.stringify(this.favoriteMatches));
+  }
+
+  toggleFavorite(matchId: number): void {
+    if (this.favoriteMatches.includes(matchId)) {
+      this.favoriteMatches = this.favoriteMatches.filter((id) => id !== matchId);
+    } else {
+      this.favoriteMatches.push(matchId);
+    }
+    this.saveFavorites();
+  }
+
+  isFavorite(matchId: number): boolean {
+    return this.favoriteMatches.includes(matchId);
+  }
+
+  
 }

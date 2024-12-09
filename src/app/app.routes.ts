@@ -9,6 +9,7 @@ import { TeamOverviewComponent } from './team-overview/team-overview.component';
 import { LeagueTableComponent } from './league-table/league-table.component'; // Importa el componente LeagueTable
 import { PlayerStatsComponent } from './player-estadisticas/player-estadisticas.component';
 import { PlayerDetailsComponent } from './player-details/player-details.component'; // Importa el nuevo componente
+import { FavoritesComponent } from './favorites/favorites.component'; // Importa el componente Favorites
 
 export const routes: Routes = [
   { path: '', component: SidebarComponent },
@@ -26,4 +27,5 @@ export const routes: Routes = [
   { path: 'player-details', component: PlayerDetailsComponent }, // Nueva ruta para detalles del jugador
   { path: 'referee/:leagueId/:name', component: RefereeDetailsComponent },
   { path: 'match/:id', component: MatchDetailsComponent },
+  { path: 'favorites', component: FavoritesComponent }, // Nueva ruta para favoritos
 ];

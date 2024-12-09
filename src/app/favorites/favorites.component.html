@@ -1,0 +1,32 @@
+<div class="favorites-container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <span class="tab active">Matches</span>
+      <span class="tab">Teams</span>
+    </div>
+  
+    <!-- Matches Section -->
+    <div class="section">
+      <h3>Matches</h3>
+      <p *ngIf="favoriteMatches.length === 0">Tap ⭐ to add a Match to Favorites</p>
+      <ul>
+        <li *ngFor="let match of favoriteMatches">
+          <span>{{ match.name }}</span>
+          <i class="fas fa-star" (click)="removeMatchFromFavorites(match.id)"></i>
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Teams Section -->
+    <div class="section">
+      <h3>Teams</h3>
+      <p *ngIf="favoriteTeams.length === 0">Tap ⭐ to add a Team to Favorites</p>
+      <ul>
+        <li *ngFor="let team of favoriteTeams">
+          <span>{{ team.name }}</span>
+          <i class="fas fa-star" (click)="removeTeamFromFavorites(team.id)"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+  

@@ -83,6 +83,7 @@ export class FootballService {
     return this.http.get(`${this.apiUrl}/referees/overview/${leagueId}?season=${season}`);
   }
   
+  
   // Obtener equipos con soporte para búsqueda
   getTeams(leagueId: number, season: number, search: string = ''): Observable<any> {
     const params: any = { leagueId, season };

@@ -149,8 +149,6 @@ export class MatchesTodayComponent implements OnInit {
     this.saveFavorites();
 }
 
-
-
 isFavorite(matchId: number): boolean {
   return this.favoriteMatches.some((fav) => fav.id === matchId);
 }

@@ -271,3 +271,17 @@
   background-color: #d00000;
   color: #fff;
 }
+.favorite-icon {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.favorite-img {
+  width: 25px;
+  height: 25px;
+  transition: transform 0.2s ease;
+}
+
+.favorite-img:hover {
+  transform: scale(1.2);
+}

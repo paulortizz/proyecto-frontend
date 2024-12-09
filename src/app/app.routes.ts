@@ -6,10 +6,10 @@ import { RefereeDetailsComponent } from './referee-details/referee-details.compo
 import { TeamDetailsComponent } from './team-details/team-details.component';
 import { TeamMatchesComponent } from './team-matches/team-matches.component';
 import { TeamOverviewComponent } from './team-overview/team-overview.component';
-import { LeagueTableComponent } from './league-table/league-table.component'; // Importa el componente LeagueTable
+import { LeagueTableComponent } from './league-table/league-table.component'; 
 import { PlayerStatsComponent } from './player-estadisticas/player-estadisticas.component';
-import { PlayerDetailsComponent } from './player-details/player-details.component'; // Importa el nuevo componente
-import { FavoritesComponent } from './favorites/favorites.component'; // Importa el componente Favorites
+import { PlayerDetailsComponent } from './player-details/player-details.component'; 
+import { FavoritesComponent } from './favorites/favorites.component'; 
 
 export const routes: Routes = [
   { path: '', component: SidebarComponent },
@@ -24,8 +24,8 @@ export const routes: Routes = [
       { path: 'player-stats', component: PlayerStatsComponent },
     ],
   },
-  { path: 'player-details', component: PlayerDetailsComponent }, // Nueva ruta para detalles del jugador
+  { path: 'player-details', component: PlayerDetailsComponent }, 
   { path: 'referee/:leagueId/:name', component: RefereeDetailsComponent },
   { path: 'match/:id', component: MatchDetailsComponent },
-  { path: 'favorites', component: FavoritesComponent }, // Nueva ruta para favoritos
+  { path: 'favorites', component: FavoritesComponent }, 
 ];

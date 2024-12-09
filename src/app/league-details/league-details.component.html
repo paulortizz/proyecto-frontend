@@ -21,34 +21,40 @@
     <button (click)="showSection('live')" [class.active]="currentSection === 'live'">Live</button>
   </div>
 
+  <!-- Sección de Upcoming Matches -->
   <div *ngIf="currentSection === 'overview'" class="section-content">
     <h2>Upcoming Matches</h2>
     <ng-container *ngIf="groupedFixtures.length > 0; else noMatches">
       <div *ngFor="let group of groupedFixtures" class="matchday-group">
         <h3>Matchday {{ group.matchday }}</h3>
-        <div *ngFor="let fixture of group.fixtures">
-          <!-- Enlace para redirigir al componente de detalles del partido -->
-          <a [routerLink]="['/match', fixture.id]" class="match-link">
-            <div class="match-item">
-              <div class="match-info">
-                <div class="match-date">
-                  <span class="match-day">{{ fixture.date | date: 'dd MMM' }}</span>
-                  <span class="match-time">{{ fixture.date | date: 'shortTime' }}</span>
-                </div>
-                <div class="teams-info">
-                  <div class="team">
-                    <img [src]="fixture.home.logo || 'assets/default-team-logo.png'" alt="Home Team Logo" class="team-logo">
-                    <span>{{ fixture.home.name }}</span>
-                  </div>
-                  <span class="versus">VS</span>
-                  <div class="team">
-                    <span>{{ fixture.away.name }}</span>
-                    <img [src]="fixture.away.logo || 'assets/default-team-logo.png'" alt="Away Team Logo" class="team-logo">
-                  </div>
-                </div>
+        <div *ngFor="let fixture of group.fixtures" class="match-item">
+          <div class="match-info">
+            <div class="match-date">
+              <span class="match-day">{{ fixture.date | date: 'dd MMM' }}</span>
+              <span class="match-time">{{ fixture.date | date: 'shortTime' }}</span>
+            </div>
+            <div class="teams-info">
+              <div class="team">
+                <img [src]="fixture.home.logo || 'assets/default-team-logo.png'" alt="Home Team Logo" class="team-logo">
+                <span>{{ fixture.home.name }}</span>
+              </div>
+              <span class="versus">VS</span>
+              <div class="team">
+                <span>{{ fixture.away.name }}</span>
+                <img [src]="fixture.away.logo || 'assets/default-team-logo.png'" alt="Away Team Logo" class="team-logo">
               </div>
             </div>
-          </a>
+          </div>
+          <!-- Marcador e ícono de favoritos -->
+          <div class="match-actions">
+            <div class="favorite-icon" (click)="toggleFavorite(fixture)">
+              <img
+                [src]="isFavorite(fixture.id) ? 'assets/icons/fav-gold.png' : 'assets/icons/fav.png'"
+                alt="Favorite Icon"
+                class="favorite-img"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -56,7 +62,7 @@
       <p>No matches available at the moment.</p>
     </ng-template>
   </div>
-  
+
   <!-- Sección de Resultados Recientes -->
   <div *ngIf="currentSection === 'matches'" class="section-content recent-results">
     <h2>Recent Results</h2>
@@ -75,16 +81,23 @@
           </div>
           <span class="status">{{ result?.status || 'FT' }}</span>
         </a>
+        <!-- Marcador e ícono de favoritos -->
+        <div class="match-actions">
+          <div class="favorite-icon" (click)="toggleFavorite(result)">
+            <img
+              [src]="isFavorite(result.id) ? 'assets/icons/fav-gold.png' : 'assets/icons/fav.png'"
+              alt="Favorite Icon"
+              class="favorite-img"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <ng-template #noResults>
       <p>No results available at the moment.</p>
     </ng-template>
   </div>
-  
-
-
-
+</div>
   <!-- Sección de Tabla de Posiciones -->
   <div *ngIf="currentSection === 'table'" class="section-content">
     <h2>Standings</h2>
@@ -125,4 +138,3 @@
       <p>No standings available for this league.</p>
     </ng-template>
   </div>
-</div>

@@ -19,6 +19,7 @@ export class LeagueDetailsComponent implements OnInit {
   results: any[] = [];
   standings: any[] = [];
   liveFixtures: any[] = [];
+  favoriteMatches: any[] = [];
   groups: { [key: string]: any[] } = {};
   currentSection: string = 'overview';
   currentSeason: string = new Date().getFullYear().toString();
@@ -27,6 +28,8 @@ export class LeagueDetailsComponent implements OnInit {
     { length: 5 },
     (_, i) => (parseInt(this.currentSeason) - i).toString()
   );
+
+   // Partidos favoritos
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -45,6 +48,7 @@ export class LeagueDetailsComponent implements OnInit {
         this.loadLiveFixtures(leagueId);
       }
     });
+    this.loadFavorites(); // Cargar favoritos al iniciar
   }
 
   goBack(): void {
@@ -106,7 +110,7 @@ export class LeagueDetailsComponent implements OnInit {
       next: (data: any) => {
         if (data && data.status === 'success') {
           this.results = data.data.map((result: any) => ({
-            id: result.id, // Mapea correctamente el ID del partido
+            id: result.id,
             date: result.date,
             teams: {
               home: {
@@ -187,4 +191,46 @@ export class LeagueDetailsComponent implements OnInit {
   getGroupKeys(): string[] {
     return this.groups ? Object.keys(this.groups) : [];
   }
-}
+
+  // Funcionalidades de favoritos
+  loadFavorites(): void {
+    const storedFavorites = localStorage.getItem('favoriteMatches');
+    this.favoriteMatches = storedFavorites ? JSON.parse(storedFavorites) : [];
+  }
+
+  saveFavorites(): void {
+    localStorage.setItem('favoriteMatches', JSON.stringify(this.favoriteMatches));
+  }
+
+  toggleFavorite(match: any): void {
+    const favoriteIndex = this.favoriteMatches.findIndex((fav) => fav.id === match.id);
+  
+    if (favoriteIndex !== -1) {
+      // Eliminar de favoritos
+      this.favoriteMatches.splice(favoriteIndex, 1);
+    } else {
+      // Agregar a favoritos
+      const favoriteMatch = {
+        id: match.id,
+        time: match.date
+          ? new Date(match.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          : '',
+        status: match.status || match.fixture?.status?.short || 'Not Started',
+        homeLogo: match.home?.logo || match.teams?.home?.logo || 'assets/default-team-logo.png',
+        homeName: match.home?.name || match.teams?.home?.name,
+        awayLogo: match.away?.logo || match.teams?.away?.logo || 'assets/default-team-logo.png',
+        awayName: match.away?.name || match.teams?.away?.name,
+        homeScore: match.goals?.home ?? '-',
+        awayScore: match.goals?.away ?? '-',
+      };
+      this.favoriteMatches.push(favoriteMatch);
+    }
+  
+    this.saveFavorites();
+  }
+  
+  
+  isFavorite(matchId: number): boolean {
+    return this.favoriteMatches.some((fav) => fav.id === matchId);
+  }
+}  

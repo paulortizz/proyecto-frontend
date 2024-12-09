@@ -11,9 +11,14 @@
               <span class="team-name">{{ match.homeName }}</span>
             </div>
             <div class="match-info">
-              <div class="time">{{ match.time }}</div>
-              <div class="score">{{ match.homeScore }} - {{ match.awayScore }}</div>
-              <div class="status">{{ match.status }}</div>
+              <div class="time">{{ match.time || 'N/A' }}</div>
+              <div class="score">
+                <span *ngIf="match.homeScore !== '-' && match.awayScore !== '-'">
+                  {{ match.homeScore }} - {{ match.awayScore }}
+                </span>
+                <span *ngIf="match.homeScore === '-' && match.awayScore === '-'">Not Played</span>
+              </div>
+              <div class="status">{{ match.status || 'Scheduled' }}</div>
             </div>
             <div class="team">
               <img [src]="match.awayLogo" alt="{{ match.awayName }}" class="team-logo" />
@@ -21,10 +26,21 @@
             </div>
           </div>
         </a>
-        <div class="favorite-icon" (click)="removeMatchFromFavorites(match.id)">
+        <!-- Botón para eliminar de favoritos -->
+        <div
+          class="favorite-icon"
+          tabindex="0"
+          role="button"
+          aria-label="Remove from favorites"
+          (click)="removeMatchFromFavorites(match.id)"
+          (keydown.enter)="removeMatchFromFavorites(match.id)"
+        >
           <img src="assets/icons/fav-gold.png" alt="Remove from favorites" />
         </div>
       </div>
     </div>
   </ng-container>
+  <div *ngIf="groupedFavorites.length === 0" class="no-favorites">
+    <p>No matches have been added to favorites yet.</p>
+  </div>
 </div>
